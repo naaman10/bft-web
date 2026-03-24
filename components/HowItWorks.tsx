@@ -111,8 +111,7 @@ export function HowItWorks() {
             How it works
           </h2>
           <p className="mt-4 text-lg leading-8 text-slate-600">
-            From first message to regular updates — a clear path for your
-            family.
+            From first message to regular updates — a clear path for your family.
           </p>
         </div>
 

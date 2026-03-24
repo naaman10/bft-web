@@ -5,6 +5,7 @@ import {
   SERVICE_IMAGE_HOME_ED,
   SERVICE_IMAGE_ONE_TO_ONE,
 } from "@/lib/service-images";
+import { LOCAL_AREA } from "@/lib/site-location";
 
 interface ServiceItem {
   title: string;
@@ -26,21 +27,21 @@ const defaultServices: ServiceItem[] = [
   {
     title: "1:1 Sessions",
     description:
-      "Personalised one-to-one tuition tailored to your child’s pace, goals and confidence in Maths, Reading and SPaG.",
+      `Personalised one-to-one tuition tailored to your child’s pace, goals and confidence in Maths, Reading and SPaG.`,
     href: "/services/one-to-one",
     imageSrc: SERVICE_IMAGE_ONE_TO_ONE,
   },
   {
     title: "Group Sessions",
     description:
-      "Small, collaborative groups that keep learning engaging—with peer support and plenty of practice.",
+      `Small, collaborative groups that keep learning engaging—with peer support and plenty of practice.`,
     href: "/services/group",
     imageSrc: SERVICE_IMAGE_GROUP,
   },
   {
     title: "Home-ed Sessions",
     description:
-      "Structured support that fits your home education routine, with consistent teaching across core subjects.",
+      `Structured support that fits your home education routine, with consistent teaching across core subjects—supporting home-ed families.`,
     href: "/services/home-ed",
     imageSrc: SERVICE_IMAGE_HOME_ED,
   },
@@ -53,9 +54,13 @@ export function Services({ headline, services }: ServicesProps) {
   return (
     <section id="services" className="py-16 md:py-24 bg-[#f9fafb]">
       <div className="mx-auto max-w-6xl px-6">
-        <h2 className="text-3xl font-semibold text-center text-slate-900 mb-12">
+        <h2 className="text-3xl font-semibold text-center text-slate-900 mb-4">
           {headline}
         </h2>
+        <p className="mx-auto mb-12 max-w-2xl text-center text-base text-slate-600">
+          Our tutoring services are available to families in and around the{" "}
+          {LOCAL_AREA} area.
+        </p>
         <div className="grid md:grid-cols-3 gap-6">
           {items.map((service, i) => (
             <div

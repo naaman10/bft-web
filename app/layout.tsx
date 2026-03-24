@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { LOCAL_AREA_META } from "@/lib/site-location";
 
 export const metadata: Metadata = {
-  title: "Brighter Futures Tutoring",
+  title: "Brighter Futures Tutoring | Greater Manchester",
   description:
-    "Private tutoring to help students achieve their best. One-to-one support tailored to your goals.",
+    `Personalised Maths, Reading and SPaG tutoring for children aged 5–14. One-to-one, group and home-ed sessions. ${LOCAL_AREA_META}`,
 };
 
 export default function RootLayout({

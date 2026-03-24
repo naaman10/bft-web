@@ -4,11 +4,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ServiceHeroImage } from "@/components/ServiceHeroImage";
 import { SERVICE_IMAGE_HOME_ED } from "@/lib/service-images";
+import { LOCAL_AREA_META } from "@/lib/site-location";
 
 export const metadata: Metadata = {
   title: "Home Education Sessions | Brighter Futures Tutoring",
   description:
-    "A personalised approach to home education—bespoke curriculum, tailored teaching and flexible support that fits your child and your family.",
+    `A personalised approach to home education—bespoke curriculum and flexible support. ${LOCAL_AREA_META}`,
 };
 
 function ImagePlaceholderLight({ label }: { label: string }) {
@@ -74,10 +75,11 @@ export default function HomeEdSessionsPage() {
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/90">
                 A personalised approach to learning, designed entirely around
-                your child.
+                your child—supporting home-educating families in and around
+                Greater Manchester.
               </p>
               <Link
-                href="/#contact"
+                href="/contact"
                 className="mt-8 inline-flex items-center rounded-2xl bg-primary-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary-900/20 transition hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
               >
                 Enquire about availability
@@ -221,7 +223,7 @@ export default function HomeEdSessionsPage() {
               child.
             </p>
             <Link
-              href="/#contact"
+              href="/contact"
               className="mt-8 inline-flex items-center rounded-2xl bg-white px-8 py-3.5 text-base font-semibold text-[#2980B9] shadow-lg transition hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
             >
               Contact us

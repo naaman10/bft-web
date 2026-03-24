@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
@@ -5,18 +6,22 @@ import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { Testimonials } from "@/components/Testimonials";
 import { Services } from "@/components/Services";
 import { CTA } from "@/components/CTA";
-import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
-import { getHomePage } from "@/lib/contentful";
+import { getHomePage, getReviews } from "@/lib/contentful";
 import type { Service } from "@/lib/contentful";
+import { LOCAL_AREA_META } from "@/lib/site-location";
 
 // Revalidate at most every 60s so Contentful updates appear without redeploying
 export const revalidate = 60;
 
+export const metadata: Metadata = {
+  description: `Fun, engaging tutoring for ages 5–14 in Maths, Reading and SPaG. 1:1, group and home-ed options. ${LOCAL_AREA_META}`,
+};
+
 const defaults = {
   heroHeadline: "Helping Your Child Build Confidence & Thrive",
   heroSubtext:
-    "Fun, engaging and personalised 1:1 tutoring for ages 5–14 in Maths, Reading and SPaG.",
+    "Fun, engaging and personalised tutoring for ages 5–14 in Maths, Reading and SPaG—available to families in and around the Greater Manchester area.",
   ctaLabel: "Book a Session",
   secondaryCtaLabel: "Learn More",
   urgencyText: "Limited availability – secure your space today",
@@ -29,10 +34,24 @@ const defaults = {
 export default async function HomePage() {
   let content: typeof defaults | null = null;
   let services: Service[] = [];
+  let reviews: Awaited<ReturnType<typeof getReviews>> = [];
 
   if (process.env.CONTENTFUL_SPACE_ID && process.env.CONTENTFUL_ACCESS_TOKEN) {
     try {
-      const home = await getHomePage();
+      const [home, reviewEntries] = await Promise.all([
+        getHomePage(),
+        getReviews(),
+      ]);
+      reviews = reviewEntries;
+      if (
+        process.env.CONTENTFUL_DEBUG === "1" ||
+        process.env.NODE_ENV === "development"
+      ) {
+        console.log(
+          "[homepage] Contentful reviews passed to Testimonials:",
+          reviews.length
+        );
+      }
       if (home) {
         content = {
           ...defaults,
@@ -69,13 +88,8 @@ export default async function HomePage() {
         <Services headline={c.servicesHeadline} services={services} />
         <HowItWorks />
         <WhyChooseUs />
-        <Testimonials />
+        <Testimonials reviews={reviews.length > 0 ? reviews : undefined} />
         <CTA />
-        <Contact
-          headline={c.contactHeadline}
-          email={c.contactEmail}
-          phone={c.contactPhone}
-        />
       </main>
       <Footer />
     </div>

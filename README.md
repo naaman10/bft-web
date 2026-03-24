@@ -44,7 +44,49 @@ npm install
 
 5. Create one **Home Page** entry and publish it. The site will use this entry for the homepage content.
 
+6. **Testimonials:** Create a content type **Review** with API ID **`review`** (Settings → Content model). The site expects these field API IDs:
+
+   | Field name (suggested) | API ID       | Type        |
+   |------------------------|--------------|-------------|
+   | Parent name            | `parentName` | Short text  |
+   | Review text            | `reviewText` | Rich text   |
+   | Location               | `location`   | Short text  |
+
+   Add and **publish** one entry per testimonial. The homepage loads them via `getReviews()` (ordered by creation time). If none are returned, **placeholder testimonials** are shown instead.
+
+   If your API IDs differ, adjust the field keys read in `getReviews()` inside `lib/contentful.ts`.
+
+   **Reviews not showing?** Entries must be **published**. By default we no longer force `locale: en-US` — the API uses your **space default locale** so localized fields match. If you need a specific locale, set `CONTENTFUL_LOCALE` in `.env.local`. If the content type API ID isn’t `review`, set `CONTENTFUL_REVIEW_CONTENT_TYPE`. For server-side hints, set `CONTENTFUL_DEBUG=1` and check the terminal when loading the homepage.
+
 Without Contentful configured, the site still runs and uses built-in default copy.
+
+### Contact form (`/contact`)
+
+The contact page posts to `/api/contact`. Submissions are validated on the server.
+
+**Bot protection**
+
+1. **Honeypot (always on)** — A hidden “company” field must stay empty; simple bots that autofill every input are rejected.
+2. **Cloudflare Turnstile (recommended for production)** — Add both keys in `.env.local` / Vercel:
+   - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` — site key (widget on the form)
+   - `TURNSTILE_SECRET_KEY` — secret (server verifies the token on each submit)
+
+   Create a Turnstile widget in the [Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/turnstile) and allow your domains (include `localhost` for local testing). If the secret is set, the API **requires** a valid Turnstile token; if only the honeypot is used (no Turnstile keys), submissions still work.
+
+**Other options** (not built in here): Google reCAPTCHA v3, hCaptcha, or rate limiting (e.g. Upstash) — Turnstile is free and works well on Vercel.
+
+**Email delivery**
+
+- **Without Resend:** The API still returns success; the enquiry is logged on the server (terminal or Vercel logs).
+- **With [Resend](https://resend.com):**
+
+  ```env
+  RESEND_API_KEY=re_xxxxxxxx
+  CONTACT_FROM_EMAIL=Brighter Futures <hello@yourdomain.com>
+  CONTACT_TO_EMAIL=you@yourdomain.com
+  ```
+
+  Use a verified domain/sender in Resend for `CONTACT_FROM_EMAIL`.
 
 ### 3. Run the dev server
 

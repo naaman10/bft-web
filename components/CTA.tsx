@@ -7,9 +7,9 @@ interface CTAProps {
 
 export function CTA({
   headline = "Ready to Support Your Child's Learning?",
-  subtext = "Enquire today to secure one of our limited 1:1 tutoring spaces.",
+  subtext = "Enquire today to secure one of our limited tutoring spaces in and around Greater Manchester.",
   buttonLabel = "Get Started",
-  buttonHref = "#contact",
+  buttonHref = "/contact",
 }: CTAProps) {
   return (
     <section className="max-w-6xl mx-auto px-6 py-20 text-center">

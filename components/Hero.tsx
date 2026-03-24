@@ -22,7 +22,7 @@ export function Hero({
   headline,
   subtext,
   ctaLabel,
-  ctaHref = "#contact",
+  ctaHref = "/contact",
   secondaryCtaLabel,
   secondaryCtaHref = "#services",
   urgencyText = "Limited availability – secure your space today",

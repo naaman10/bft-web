@@ -1,3 +1,5 @@
+import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
+
 const reasons = [
   {
     title: "1:1 Personalised Learning",
@@ -19,9 +21,12 @@ const reasons = [
 export function WhyChooseUs() {
   return (
     <section className="max-w-6xl mx-auto px-6 py-16">
-      <h2 className="text-3xl font-semibold text-center text-slate-900 mb-12">
+      <h2 className="text-3xl font-semibold text-center text-slate-900 mb-4">
         Why Parents Choose Us
       </h2>
+      <p className="mx-auto mb-12 max-w-2xl text-center text-base text-slate-600">
+        Trusted tutoring for ages 5–14 {LOCAL_AREA_PHRASE}.
+      </p>
       <div className="grid md:grid-cols-3 gap-6">
         {reasons.map((item) => (
           <div

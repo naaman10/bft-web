@@ -4,11 +4,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ServiceHeroImage } from "@/components/ServiceHeroImage";
 import { SERVICE_IMAGE_GROUP } from "@/lib/service-images";
+import { LOCAL_AREA_META } from "@/lib/site-location";
 
 export const metadata: Metadata = {
   title: "Group Tutoring Sessions | Brighter Futures Tutoring",
   description:
-    "Support your child's learning in a fun, structured and encouraging group environment with expert teaching and peer interaction.",
+    `Support your child's learning in a fun, structured group environment with expert teaching and peer interaction. ${LOCAL_AREA_META}`,
 };
 
 function ImagePlaceholderLight({ label }: { label: string }) {
@@ -74,10 +75,11 @@ export default function GroupSessionsPage() {
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/90">
                 Support your child&apos;s learning in a fun, structured and
-                encouraging group environment.
+                encouraging group environment. Sessions run for families across
+                Greater Manchester and nearby areas.
               </p>
               <Link
-                href="/#contact"
+                href="/contact"
                 className="mt-8 inline-flex items-center rounded-2xl bg-primary-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary-900/20 transition hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
               >
                 Enquire about availability
@@ -219,7 +221,7 @@ export default function GroupSessionsPage() {
               Get in touch today to enquire about group session availability.
             </p>
             <Link
-              href="/#contact"
+              href="/contact"
               className="mt-8 inline-flex items-center rounded-2xl bg-white px-8 py-3.5 text-base font-semibold text-[#2980B9] shadow-lg transition hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
             >
               Contact us

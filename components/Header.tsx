@@ -78,8 +78,8 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
               </div>
             </div>
           </div>
-          <a
-            href="#contact"
+          <Link
+            href="/about"
             className={[
               "text-sm font-medium transition-colors duration-300",
               scrolled
@@ -87,8 +87,17 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
                 : "text-white/90 hover:text-white",
             ].join(" ")}
           >
-            Contact
-          </a>
+            About
+          </Link>
+          <Link
+            href="/contact"
+            className={[
+              "rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-white/90 focus:ring-offset-2",
+              scrolled ? "focus:ring-offset-white" : "focus:ring-offset-transparent",
+            ].join(" ")}
+          >
+            Get Started
+          </Link>
         </nav>
       </div>
     </header>

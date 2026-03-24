@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface ContactProps {
   headline: string;
   email?: string;
@@ -12,13 +14,21 @@ export function Contact({ headline, email, phone }: ContactProps) {
           {headline}
         </h2>
         <p className="mt-4 text-slate-600 dark:text-slate-300">
-          Get in touch to discuss how we can support your child’s learning.
+          Get in touch to discuss how we can support your child&apos;s
+          learning—we work with families in and around the Greater Manchester
+          area.
         </p>
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
+          <Link
+            href="/contact"
+            className="inline-flex items-center rounded-lg bg-primary-600 px-6 py-3 text-base font-medium text-white hover:bg-primary-500"
+          >
+            Contact form
+          </Link>
           {email && (
             <a
               href={`mailto:${email}`}
-              className="inline-flex items-center rounded-lg bg-primary-600 px-6 py-3 text-base font-medium text-white hover:bg-primary-500"
+              className="inline-flex items-center rounded-lg border-2 border-primary-600 bg-white px-6 py-3 text-base font-medium text-primary-700 hover:bg-primary-50"
             >
               Email us
             </a>
@@ -31,12 +41,13 @@ export function Contact({ headline, email, phone }: ContactProps) {
               Call us
             </a>
           )}
-          {!email && !phone && (
-            <p className="text-slate-500 dark:text-slate-400">
-              Add your email and phone in Contentful to show contact buttons.
-            </p>
-          )}
         </div>
+        {!email && !phone && (
+          <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+            Add your email and phone in Contentful to show quick contact
+            buttons alongside the form link.
+          </p>
+        )}
       </div>
     </section>
   );
