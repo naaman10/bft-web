@@ -3,6 +3,8 @@ import {
   isValidServiceInterest,
   SERVICE_INTEREST_OPTIONS,
 } from "@/lib/contact-form-options";
+import { insertLead } from "@/lib/insert-lead";
+import { getPgErrorInfo } from "@/lib/pg-error";
 import { verifyTurnstileToken } from "@/lib/verify-turnstile";
 
 type ContactBody = {
@@ -119,6 +121,53 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: "Please check all fields and try again." },
       { status: 400 }
+    );
+  }
+
+  try {
+    await insertLead({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      contactNumber: data.phone,
+      contactEmail: data.email,
+      childAge: Number(data.childAge),
+      interest: labelForInterest(data.interestedIn),
+    });
+  } catch (err) {
+    const pg = getPgErrorInfo(err);
+    console.error("[contact] Neon lead insert failed:", {
+      code: pg.code,
+      message: pg.message,
+      detail: pg.detail,
+    });
+
+    if (pg.code === "23505") {
+      return NextResponse.json(
+        {
+          error:
+            "We already have an enquiry from this email address. If you need to add more detail, please email us directly.",
+        },
+        { status: 409 }
+      );
+    }
+
+    const showDebug =
+      process.env.NODE_ENV === "development" ||
+      process.env.CONTACT_DEBUG === "1";
+
+    return NextResponse.json(
+      {
+        error:
+          "We could not save your message right now. Please try again later.",
+        ...(showDebug
+          ? {
+              debug: pg.message,
+              code: pg.code ?? null,
+              detail: pg.detail ?? null,
+            }
+          : {}),
+      },
+      { status: 502 }
     );
   }
 

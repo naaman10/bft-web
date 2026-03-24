@@ -88,6 +88,18 @@ The contact page posts to `/api/contact`. Submissions are validated on the serve
 
   Use a verified domain/sender in Resend for `CONTACT_FROM_EMAIL`.
 
+**Neon (lead capture)**
+
+- Set **`DATABASE_URL`** to your Neon connection string (from the project dashboard). Valid submissions are inserted into the **`"lead"`** table after validation and bot checks, **before** optional Resend email.
+- Create the table (if needed) using **`sql/lead.sql`** as a reference, or use your existing schema. Inserts use: `first_name`, `last_name`, `contact_email`, `contact_number`, `child_age`, `interest`, `source` (default **`website`**, overridable with **`LEAD_SOURCE`**), and **`status`** = `'new'`. `notes` is left null; `id`, `created_at`, and `updated_at` use database defaults.
+- **`contact_email` is unique** — a duplicate email returns **409** with a clear message (not a generic 502).
+- **`LEAD_TABLE_NAME`** — if the table is not `lead` (e.g. `leads`), set this env var (identifier characters only).
+- **Debugging failed inserts** — in `npm run dev`, the JSON body can include **`debug`**, **`code`**, and **`detail`** (Postgres error). On Vercel, set **`CONTACT_DEBUG=1`** temporarily to get the same fields in the response, or check function logs for `[contact] Neon lead insert failed:`.
+- If `DATABASE_URL` is **unset**, the API skips the database (and logs a warning in development); email and logging behave as before.
+- If `DATABASE_URL` is **set** and the insert fails, the API returns **502** and the client sees an error (the row is not saved).
+
+If your `lead` table differs, update the `INSERT` in `lib/insert-lead.ts` to match.
+
 ### 3. Run the dev server
 
 ```bash
@@ -104,6 +116,7 @@ The project is set up for one-click deploy on [Vercel](https://vercel.com):
 2. Add **Environment Variables** in the Vercel project settings (or during import):
    - `CONTENTFUL_SPACE_ID` — your Contentful space ID
    - `CONTENTFUL_ACCESS_TOKEN` — your Contentful Content Delivery API token
+   - `DATABASE_URL` — Neon connection string (contact form → `"lead"` table)
 3. Deploy. Vercel will run `npm run build` and deploy the output.
 
 **Optimisations included:**
