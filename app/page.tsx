@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
@@ -76,7 +75,6 @@ export default async function HomePage() {
 
   return (
     <div className="bg-[#f9fafb] text-slate-800 min-h-screen">
-      <Header />
       <main>
         <Hero
           headline={c.heroHeadline}

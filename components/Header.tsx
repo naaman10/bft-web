@@ -11,13 +11,28 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    const getScrollY = () => {
+      if (typeof window === "undefined") return 0;
+      return Math.max(
+        window.scrollY,
+        window.pageYOffset,
+        document.documentElement?.scrollTop ?? 0,
+        document.body?.scrollTop ?? 0,
+        document.scrollingElement?.scrollTop ?? 0
+      );
+    };
+
     const onScroll = () => {
-      setScrolled(window.scrollY > 8);
+      setScrolled(getScrollY() > 8);
     };
 
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    document.addEventListener("scroll", onScroll, { passive: true, capture: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("scroll", onScroll, { capture: true });
+    };
   }, []);
 
   return (
@@ -25,7 +40,7 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
       className={[
         "fixed inset-x-0 top-0 z-50 w-full transition-colors duration-300",
         scrolled
-          ? "border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur"
+          ? "border-b border-slate-200 bg-white shadow-sm backdrop-blur-md"
           : "border-b border-transparent bg-transparent",
       ].join(" ")}
     >

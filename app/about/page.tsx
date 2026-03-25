@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
@@ -20,8 +19,6 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
-      <Header />
-
       <main>
         {/* Hero — organisation */}
         <section

@@ -27,7 +27,7 @@ const defaultServices: ServiceItem[] = [
   {
     title: "1:1 Sessions",
     description:
-      `Personalised one-to-one tuition tailored to your child’s pace, goals and confidence in Maths, Reading and SPaG.`,
+      `Personalised one-to-one tuition tailored to your child’s pace, goals and confidence in 11+ Prep, Maths, Reading, SPaG and more.`,
     href: "/services/one-to-one",
     imageSrc: SERVICE_IMAGE_ONE_TO_ONE,
   },

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ServiceHeroImage } from "@/components/ServiceHeroImage";
 import { SERVICE_IMAGE_ONE_TO_ONE } from "@/lib/service-images";
@@ -27,8 +26,6 @@ function ImagePlaceholderLight({ label }: { label: string }) {
 export default function OneToOnePage() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
-      <Header />
-
       {/* Hero — gradient band + asymmetric split */}
       <main>
         <section
@@ -107,13 +104,17 @@ export default function OneToOnePage() {
 
             <div className="grid gap-6 sm:grid-cols-3">
               {[
-                { title: "Maths", blurb: "Number sense, reasoning and confidence with concepts." },
+                { title: "English", blurb: "Building strong literacy skills and confidence in reading and writing." },
+                { title: "Reading", blurb: "Fluency, comprehension and a love of books." },
                 {
                   title: "SPaG",
                   subtitle: "Spelling, Punctuation and Grammar",
                   blurb: "Clear, structured support for literacy foundations.",
                 },
-                { title: "Reading", blurb: "Fluency, comprehension and a love of books." },
+                { title: "Maths", blurb: "Number sense, reasoning and confidence with concepts." },
+                { title: "Mental Arithmetic", blurb: "Developing fast mental maths skills and confidence." },
+                { title: "11+ Prep", blurb: "Preparing for 11+ exams with confidence and focus." },
+
               ].map((item, i) => (
                 <div
                   key={item.title}

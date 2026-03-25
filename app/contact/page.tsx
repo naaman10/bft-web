@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ContactPageForm } from "@/components/ContactPageForm";
 import { LOCAL_AREA_META } from "@/lib/site-location";
@@ -14,8 +13,6 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
-      <Header />
-
       <main>
         <section
           className="relative overflow-hidden pt-28 md:pt-32"

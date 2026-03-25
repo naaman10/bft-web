@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ServiceHeroImage } from "@/components/ServiceHeroImage";
 import { SERVICE_IMAGE_GROUP } from "@/lib/service-images";
@@ -52,8 +51,6 @@ const whyChoose = [
 export default function GroupSessionsPage() {
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
-      <Header />
-
       <main>
         <section
           className="relative overflow-hidden pt-28 md:pt-32"
