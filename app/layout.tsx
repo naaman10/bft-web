@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { LOCAL_AREA_META } from "@/lib/site-location";
+
+const TERMLY_WEBSITE_UUID = "0a6a6e27-c09c-41a7-82db-79117b51814c";
 
 export const metadata: Metadata = {
   title: "Brighter Futures Tutoring | Greater Manchester",
@@ -29,6 +32,11 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen font-sans antialiased">
+        <Script
+          id="termly-resource-blocker"
+          strategy="beforeInteractive"
+          src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}?autoBlock=on`}
+        />
         <Header />
         {children}
       </body>
