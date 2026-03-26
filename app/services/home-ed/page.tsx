@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ServiceHeroImage } from "@/components/ServiceHeroImage";
 import { SERVICE_IMAGE_HOME_ED } from "@/lib/service-images";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 export const metadata: Metadata = {
@@ -49,8 +52,16 @@ const whyChoose = [
 ];
 
 export default function HomeEdSessionsPage() {
+  const siteUrl = getSiteUrl();
+
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
+      <JsonLd
+        data={breadcrumbListJsonLd(siteUrl, [
+          { name: "Home", path: "/" },
+          { name: "Home education", path: "/services/home-ed" },
+        ])}
+      />
       <main>
         <section
           className="relative overflow-hidden pt-28 md:pt-32"

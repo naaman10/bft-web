@@ -6,6 +6,9 @@ import {
   isValidServiceInterest,
   type ServiceInterestValue,
 } from "@/lib/contact-form-options";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 export const metadata: Metadata = {
@@ -26,8 +29,16 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
       ? serviceParam
       : undefined;
 
+  const siteUrl = getSiteUrl();
+
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
+      <JsonLd
+        data={breadcrumbListJsonLd(siteUrl, [
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ])}
+      />
       <main>
         <section
           className="relative overflow-hidden pt-28 md:pt-32"

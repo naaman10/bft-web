@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 const LOGO_URL =
@@ -17,8 +20,16 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  const siteUrl = getSiteUrl();
+
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
+      <JsonLd
+        data={breadcrumbListJsonLd(siteUrl, [
+          { name: "Home", path: "/" },
+          { name: "About us", path: "/about" },
+        ])}
+      />
       <main>
         {/* Hero — organisation */}
         <section

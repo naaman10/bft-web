@@ -8,6 +8,9 @@ import { CTA } from "@/components/CTA";
 import { Footer } from "@/components/Footer";
 import { getHomePage, getReviews } from "@/lib/contentful";
 import type { Service } from "@/lib/contentful";
+import { JsonLd } from "@/components/JsonLd";
+import { homeOrganizationWebSiteJsonLd } from "@/lib/json-ld";
+import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 // Revalidate at most every 60s so Contentful updates appear without redeploying
@@ -72,9 +75,11 @@ export default async function HomePage() {
   }
 
   const c = content ?? defaults;
+  const siteUrl = getSiteUrl();
 
   return (
-    <div className="bg-[#f9fafb] text-slate-800 min-h-screen">
+    <div className="min-h-screen bg-[#f9fafb] text-slate-800">
+      <JsonLd data={homeOrganizationWebSiteJsonLd(siteUrl)} />
       <main>
         <Hero
           headline={c.heroHeadline}

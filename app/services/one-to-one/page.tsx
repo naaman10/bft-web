@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ServiceHeroImage } from "@/components/ServiceHeroImage";
 import { SERVICE_IMAGE_ONE_TO_ONE } from "@/lib/service-images";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 export const metadata: Metadata = {
@@ -24,8 +27,16 @@ function ImagePlaceholderLight({ label }: { label: string }) {
 }
 
 export default function OneToOnePage() {
+  const siteUrl = getSiteUrl();
+
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
+      <JsonLd
+        data={breadcrumbListJsonLd(siteUrl, [
+          { name: "Home", path: "/" },
+          { name: "1:1 tutoring", path: "/services/one-to-one" },
+        ])}
+      />
       {/* Hero — gradient band + asymmetric split */}
       <main>
         <section
