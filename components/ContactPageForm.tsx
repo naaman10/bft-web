@@ -2,12 +2,22 @@
 
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { useRef, useState } from "react";
-import { SERVICE_INTEREST_OPTIONS } from "@/lib/contact-form-options";
+import {
+  SERVICE_INTEREST_OPTIONS,
+  type ServiceInterestValue,
+} from "@/lib/contact-form-options";
+
+type ContactPageFormProps = {
+  /** Pre-select when arriving from e.g. `/contact?service=one-to-one` */
+  initialServiceInterest?: ServiceInterestValue;
+};
 
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
-export function ContactPageForm() {
+export function ContactPageForm({
+  initialServiceInterest,
+}: ContactPageFormProps = {}) {
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
@@ -181,7 +191,7 @@ export function ContactPageForm() {
             id="interestedIn"
             name="interestedIn"
             required
-            defaultValue=""
+            defaultValue={initialServiceInterest ?? ""}
             className={inputClass}
           >
             {SERVICE_INTEREST_OPTIONS.map((opt) => (

@@ -76,7 +76,7 @@ export default function GroupSessionsPage() {
                 Greater Manchester and nearby areas.
               </p>
               <Link
-                href="/contact"
+                href="/contact?service=group"
                 className="mt-8 inline-flex items-center rounded-2xl bg-primary-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary-900/20 transition hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
               >
                 Enquire about availability
@@ -95,7 +95,12 @@ export default function GroupSessionsPage() {
           <div className="mx-auto max-w-6xl rounded-3xl border border-slate-200/80 bg-white p-8 shadow-xl shadow-slate-900/[0.06] md:p-12 lg:p-14">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
               <div className="order-2 lg:order-1">
-                <ImagePlaceholderLight label="Group session in action — optional photo or illustration" />
+                <img
+                  src="https://res.cloudinary.com/njh101010/image/upload/v1774446241/brighterfutures/Images/bft-group.jpg"
+                  alt="Group tutoring session — students learning together"
+                  className="w-full max-h-96 object-cover rounded-2xl shadow-md"
+                  loading="lazy"
+                />
               </div>
               <div className="order-1 lg:order-2">
                 <span className="text-sm font-semibold uppercase tracking-wider text-primary-600">
@@ -164,13 +169,17 @@ export default function GroupSessionsPage() {
             </div>
             <div>
               <div
-                className="flex min-h-[280px] items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-white/30 bg-white/5 text-center text-sm font-medium text-slate-400 backdrop-blur-sm"
+                className="flex min-h-[280px] items-center justify-center overflow-hidden rounded-2xl border-2 border-white/30 bg-white/5 text-center text-sm font-medium text-slate-400 backdrop-blur-sm"
                 role="img"
                 aria-label="Supporting image for group tutoring benefits"
               >
-                <span className="px-4">
-                  Image — children collaborating / group learning
-                </span>
+                <img
+                  src="https://res.cloudinary.com/njh101010/image/upload/v1774524122/bft-group-2_aszfbh.avif"
+                  alt="Children collaborating and learning in a group"
+                  className="w-full h-full object-cover"
+                  style={{ minHeight: 280, borderRadius: "1rem" }}
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>
@@ -218,7 +227,7 @@ export default function GroupSessionsPage() {
               Get in touch today to enquire about group session availability.
             </p>
             <Link
-              href="/contact"
+              href="/contact?service=group"
               className="mt-8 inline-flex items-center rounded-2xl bg-white px-8 py-3.5 text-base font-semibold text-[#2980B9] shadow-lg transition hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
             >
               Contact us

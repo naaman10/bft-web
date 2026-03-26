@@ -76,7 +76,7 @@ export default function HomeEdSessionsPage() {
                 Greater Manchester.
               </p>
               <Link
-                href="/contact"
+                href="/contact?service=home-ed"
                 className="mt-8 inline-flex items-center rounded-2xl bg-primary-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary-900/20 transition hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
               >
                 Enquire about availability
@@ -95,7 +95,13 @@ export default function HomeEdSessionsPage() {
           <div className="mx-auto max-w-6xl rounded-3xl border border-slate-200/80 bg-white p-8 shadow-xl shadow-slate-900/[0.06] md:p-12 lg:p-14">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
               <div className="order-2 lg:order-1">
-                <ImagePlaceholderLight label="Home education in action — optional photo or illustration" />
+                <img
+                  src="https://res.cloudinary.com/njh101010/image/upload/v1774524252/bft-home-1_ox8jwz.webp"
+                  alt="Home education in action"
+                  className="mx-auto rounded-2xl shadow-lg w-full h-auto object-cover bg-slate-100"
+                  style={{ maxHeight: 350 }}
+                  loading="lazy"
+                />
               </div>
               <div className="order-1 lg:order-2">
                 <span className="text-sm font-semibold uppercase tracking-wider text-primary-600">
@@ -164,13 +170,17 @@ export default function HomeEdSessionsPage() {
             </div>
             <div>
               <div
-                className="flex min-h-[280px] items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-white/30 bg-white/5 text-center text-sm font-medium text-slate-400 backdrop-blur-sm"
+                className="flex min-h-[280px] items-center justify-center overflow-hidden rounded-2xl border-2 border-white/30 bg-white/5 text-center text-sm font-medium text-slate-400 backdrop-blur-sm"
                 role="img"
                 aria-label="Supporting image for home education benefits"
               >
-                <span className="px-4">
-                  Image — child learning at home / personalised support
-                </span>
+                <img
+                  src="https://res.cloudinary.com/njh101010/image/upload/v1774524365/bft-home-2_xawas3.jpg"
+                  alt="Child learning at home with personalised support"
+                  className="h-full w-full object-cover"
+                  style={{ minHeight: 280 }}
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>
@@ -220,7 +230,7 @@ export default function HomeEdSessionsPage() {
               child.
             </p>
             <Link
-              href="/contact"
+              href="/contact?service=home-ed"
               className="mt-8 inline-flex items-center rounded-2xl bg-white px-8 py-3.5 text-base font-semibold text-[#2980B9] shadow-lg transition hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
             >
               Contact us

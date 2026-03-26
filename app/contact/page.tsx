@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ContactPageForm } from "@/components/ContactPageForm";
+import {
+  isValidServiceInterest,
+  type ServiceInterestValue,
+} from "@/lib/contact-form-options";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 export const metadata: Metadata = {
@@ -10,7 +14,18 @@ export const metadata: Metadata = {
     `Get in touch about 1:1, group or home-ed tutoring for children aged 5–14 in Maths, Reading and SPaG. ${LOCAL_AREA_META}`,
 };
 
-export default function ContactPage() {
+type ContactPageProps = {
+  searchParams: Record<string, string | string[] | undefined>;
+};
+
+export default function ContactPage({ searchParams }: ContactPageProps) {
+  const raw = searchParams.service;
+  const serviceParam = Array.isArray(raw) ? raw[0] : raw;
+  const initialServiceInterest: ServiceInterestValue | undefined =
+    serviceParam && isValidServiceInterest(serviceParam)
+      ? serviceParam
+      : undefined;
+
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
       <main>
@@ -49,7 +64,9 @@ export default function ContactPage() {
                 Fill in the form below and we&apos;ll reply as soon as we can.
               </p>
             </div>
-            <ContactPageForm />
+            <ContactPageForm
+              initialServiceInterest={initialServiceInterest}
+            />
             <p className="mt-8 border-t border-slate-100 pt-8 text-center text-sm text-slate-500">
               Prefer to browse first?{" "}
               <Link
