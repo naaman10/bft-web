@@ -12,6 +12,14 @@ export function Footer({ siteName = "Brighter Futures Tutoring" }: FooterProps) 
         <p className="mb-2 font-medium text-slate-600 dark:text-slate-300">
           Tutoring in {LOCAL_AREA} and the surrounding area
         </p>
+        <p className="mb-3">
+          <a
+            href="#"
+            className="termly-display-preferences font-medium text-slate-600 underline underline-offset-2 transition hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400"
+          >
+            Consent Preferences
+          </a>
+        </p>
         <p>© {year} {siteName}. All rights reserved.</p>
       </div>
     </footer>
