@@ -6,6 +6,9 @@ import { LOCAL_AREA_META } from "@/lib/site-location";
 
 const TERMLY_WEBSITE_UUID = "0a6a6e27-c09c-41a7-82db-79117b51814c";
 
+/** Google Analytics (gtag.js) measurement ID */
+const GA_MEASUREMENT_ID = "G-E2HM8PF27M";
+
 export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
@@ -60,6 +63,18 @@ export default function RootLayout({
         />
         <Header />
         {children}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
   );
