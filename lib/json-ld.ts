@@ -1,38 +1,78 @@
 const ORG_NAME = "Brighter Futures Tutoring";
 
-/** Home page: EducationalOrganization + LocalBusiness + WebSite (linked via @graph). */
-export function homeOrganizationWebSiteJsonLd(siteUrl: string) {
-  const orgId = `${siteUrl}/#organization`;
+const ORG_DESCRIPTION =
+  "Personalised Maths, Reading and SPaG tutoring for children aged 5–14. One-to-one, group and home-ed sessions in Greater Manchester.";
+
+const WEBSITE_DESCRIPTION =
+  "Fun, engaging tutoring for ages 5–14 in Maths, Reading and SPaG. One-to-one, group and home-ed options.";
+
+/** Stable @id for Organization — referenced by WebSite `publisher` and elsewhere. */
+export function organizationId(siteUrl: string): string {
+  return `${siteUrl.replace(/\/$/, "")}/#organization`;
+}
+
+function organizationEntity(siteUrl: string) {
+  const base = siteUrl.replace(/\/$/, "");
+  const id = organizationId(base);
 
   return {
+    "@type": ["EducationalOrganization", "LocalBusiness"],
+    "@id": id,
+    name: ORG_NAME,
+    url: base,
+    description: ORG_DESCRIPTION,
+    logo: {
+      "@type": "ImageObject",
+      url: `${base}/favicons/android-chrome-512x512.png`,
+    },
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: "Greater Manchester",
+    },
+  };
+}
+
+function webSiteEntity(siteUrl: string) {
+  const base = siteUrl.replace(/\/$/, "");
+  const orgId = organizationId(base);
+
+  return {
+    "@type": "WebSite",
+    "@id": `${base}/#website`,
+    url: base,
+    name: ORG_NAME,
+    description: WEBSITE_DESCRIPTION,
+    publisher: { "@id": orgId },
+  };
+}
+
+/**
+ * EducationalOrganization + LocalBusiness — use site-wide (e.g. root layout) so every
+ * page exposes the same organisation entity.
+ */
+export function organizationJsonLd(siteUrl: string) {
+  const base = siteUrl.replace(/\/$/, "");
+  return {
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": ["EducationalOrganization", "LocalBusiness"],
-        "@id": orgId,
-        name: ORG_NAME,
-        url: siteUrl,
-        description:
-          "Personalised Maths, Reading and SPaG tutoring for children aged 5–14. One-to-one, group and home-ed sessions in Greater Manchester.",
-        logo: {
-          "@type": "ImageObject",
-          url: `${siteUrl}/favicons/android-chrome-512x512.png`,
-        },
-        areaServed: {
-          "@type": "AdministrativeArea",
-          name: "Greater Manchester",
-        },
-      },
-      {
-        "@type": "WebSite",
-        "@id": `${siteUrl}/#website`,
-        url: siteUrl,
-        name: ORG_NAME,
-        description:
-          "Fun, engaging tutoring for ages 5–14 in Maths, Reading and SPaG. One-to-one, group and home-ed options.",
-        publisher: { "@id": orgId },
-      },
-    ],
+    ...organizationEntity(base),
+  };
+}
+
+/** WebSite linked to `#organization` — home page only, alongside layout `organizationJsonLd`. */
+export function webSiteJsonLd(siteUrl: string) {
+  const base = siteUrl.replace(/\/$/, "");
+  return {
+    "@context": "https://schema.org",
+    ...webSiteEntity(base),
+  };
+}
+
+/** Combined @graph — same as layout org + home WebSite in one script (legacy). */
+export function homeOrganizationWebSiteJsonLd(siteUrl: string) {
+  const base = siteUrl.replace(/\/$/, "");
+  return {
+    "@context": "https://schema.org",
+    "@graph": [organizationEntity(base), webSiteEntity(base)],
   };
 }
 
@@ -67,6 +107,56 @@ export function faqPageJsonLd(siteUrl: string, faqs: FaqForJsonLd[]) {
     "@type": "FAQPage",
     url: pageUrl,
     mainEntity,
+  };
+}
+
+/**
+ * Contact page: extends the site-wide organisation (`#organization`) with
+ * LocalBusiness-oriented fields (address, contact point) and a ContactPage node.
+ * Optional `NEXT_PUBLIC_CONTACT_PHONE` / `NEXT_PUBLIC_CONTACT_EMAIL` add telephone/email.
+ */
+export function contactPageLocalBusinessJsonLd(siteUrl: string) {
+  const base = siteUrl.replace(/\/$/, "");
+  const orgId = organizationId(base);
+  const contactUrl = `${base}/contact`;
+  const websiteId = `${base}/#website`;
+
+  const phone = process.env.NEXT_PUBLIC_CONTACT_PHONE?.trim();
+  const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim();
+
+  const contactPoint: Record<string, unknown> = {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    url: contactUrl,
+    availableLanguage: ["en-GB", "English"],
+  };
+  if (phone) contactPoint.telephone = phone;
+  if (email) contactPoint.email = email;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@id": orgId,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Greater Manchester",
+          addressRegion: "England",
+          addressCountry: "GB",
+        },
+        contactPoint,
+      },
+      {
+        "@type": "ContactPage",
+        "@id": `${contactUrl}#contactpage`,
+        url: contactUrl,
+        name: `Contact ${ORG_NAME}`,
+        description:
+          "Get in touch about one-to-one, group or home-ed tutoring for children aged 5–14.",
+        isPartOf: { "@id": websiteId },
+        about: { "@id": orgId },
+      },
+    ],
   };
 }
 

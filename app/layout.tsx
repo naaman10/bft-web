@@ -3,8 +3,11 @@ import Script from "next/script";
 import { Suspense } from "react";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { JsonLd } from "@/components/JsonLd";
 import { LayoutRootFix } from "@/components/LayoutRootFix";
 import { TermlyCMP } from "@/components/TermlyCMP";
+import { organizationJsonLd } from "@/lib/json-ld";
+import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 /** Termly dashboard website UUID — override with `NEXT_PUBLIC_TERMLY_WEBSITE_UUID`. */
@@ -50,6 +53,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteUrl = getSiteUrl();
+
   return (
     <html lang="en">
       <head>
@@ -74,6 +79,7 @@ export default function RootLayout({
           strategy="beforeInteractive"
           src={TERMLY_RESOURCE_BLOCKER_SRC}
         />
+        <JsonLd data={organizationJsonLd(siteUrl)} />
         <div
           id="site-shell"
           className="relative flex min-h-dvh flex-col overflow-x-clip"

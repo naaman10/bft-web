@@ -9,7 +9,7 @@ import { Footer } from "@/components/Footer";
 import { getHomePage, getReviews } from "@/lib/contentful";
 import type { Service } from "@/lib/contentful";
 import { JsonLd } from "@/components/JsonLd";
-import { homeOrganizationWebSiteJsonLd } from "@/lib/json-ld";
+import { webSiteJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
@@ -79,7 +79,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#f9fafb] text-slate-800">
-      <JsonLd data={homeOrganizationWebSiteJsonLd(siteUrl)} />
+      <JsonLd data={webSiteJsonLd(siteUrl)} />
       <main>
         <Hero
           headline={c.heroHeadline}

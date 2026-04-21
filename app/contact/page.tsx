@@ -7,7 +7,10 @@ import {
   type ServiceInterestValue,
 } from "@/lib/contact-form-options";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import {
+  breadcrumbListJsonLd,
+  contactPageLocalBusinessJsonLd,
+} from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
@@ -39,6 +42,7 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
           { name: "Contact", path: "/contact" },
         ])}
       />
+      <JsonLd data={contactPageLocalBusinessJsonLd(siteUrl)} />
       <main>
         <section
           className="relative -mt-[var(--site-header-height)] overflow-hidden pt-28 md:pt-32"
