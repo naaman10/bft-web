@@ -10,6 +10,10 @@ import { organizationJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
+const siteUrl = getSiteUrl();
+const defaultTitle = "Brighter Futures Tutoring";
+const defaultDescription = `Personalised Maths, Reading and SPaG tutoring for children aged 5–14. One-to-one, group and home-ed sessions. ${LOCAL_AREA_META}`;
+
 /** Termly dashboard website UUID — override with `NEXT_PUBLIC_TERMLY_WEBSITE_UUID`. */
 const TERMLY_WEBSITE_UUID =
   process.env.NEXT_PUBLIC_TERMLY_WEBSITE_UUID ??
@@ -26,9 +30,12 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Brighter Futures Tutoring | Greater Manchester",
-  description:
-    `Personalised Maths, Reading and SPaG tutoring for children aged 5–14. One-to-one, group and home-ed sessions. ${LOCAL_AREA_META}`,
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: defaultTitle,
+    template: "%s | Brighter Futures Tutoring",
+  },
+  description: defaultDescription,
   manifest: "/favicons/site.webmanifest",
   icons: {
     icon: [
@@ -45,6 +52,28 @@ export const metadata: Metadata = {
       { url: "/favicons/favicon.ico", sizes: "48x48" },
     ],
     apple: "/favicons/apple-touch-icon.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    siteName: defaultTitle,
+    title: defaultTitle,
+    description: defaultDescription,
+    url: "/",
+    images: [
+      {
+        url: "https://res.cloudinary.com/njh101010/image/upload/v1772015903/brighterfutures/bft-fb-profile.png",
+        width: 512,
+        height: 512,
+        alt: `${defaultTitle} — tutoring for ages 5–14`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: ["/favicons/android-chrome-512x512.png"],
   },
 };
 

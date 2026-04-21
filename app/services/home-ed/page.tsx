@@ -6,13 +6,12 @@ import { SERVICE_IMAGE_HOME_ED } from "@/lib/service-images";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbListJsonLd, serviceJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
-import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
-import { LOCAL_AREA_META } from "@/lib/site-location";
+import { LOCAL_AREA_META, LOCAL_AREA_PHRASE } from "@/lib/site-location";
 
 const PAGE_DESCRIPTION = `A personalised approach to home education—bespoke curriculum and flexible support. ${LOCAL_AREA_META}`;
 
 export const metadata: Metadata = {
-  title: "Home Education Sessions | Brighter Futures Tutoring",
+  title: "Home Education Sessions",
   description: PAGE_DESCRIPTION,
 };
 
@@ -94,7 +93,8 @@ export default function HomeEdSessionsPage() {
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/90">
                 A personalised approach to learning, designed entirely around
-                your child—supporting home-educating families {LOCAL_AREA_META}.
+                your child—supporting home-educating families{" "}
+                {LOCAL_AREA_PHRASE}.
               </p>
               <Link
                 href="/contact?service=home-ed"

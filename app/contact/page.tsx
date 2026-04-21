@@ -15,7 +15,7 @@ import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 export const metadata: Metadata = {
-  title: "Contact | Brighter Futures Tutoring",
+  title: "Contact",
   description:
     `Get in touch about 1:1, group or home-ed tutoring for children aged 5–14 in Maths, Reading and SPaG. ${LOCAL_AREA_META}`,
 };

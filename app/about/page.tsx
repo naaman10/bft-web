@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
-import { LOCAL_AREA_META, LOCAL_AREA_PHRASE } from "@/lib/site-location";
+import { LOCAL_AREA, LOCAL_AREA_META, LOCAL_AREA_PHRASE } from "@/lib/site-location";
 
 const LOGO_URL =
   "https://res.cloudinary.com/njh101010/image/upload/v1773761306/brighterfutures/bft-logo-no-text-sun.png";
@@ -14,7 +14,7 @@ const ELLIE_PORTRAIT_URL =
   "https://res.cloudinary.com/njh101010/image/upload/v1774265393/brighterfutures/IMG_2448.jpg";
 
 export const metadata: Metadata = {
-  title: "About Us | Brighter Futures Tutoring",
+  title: "About Us",
   description:
     `Learn about Brighter Futures Tutoring and Ellie Langford, lead tutor and owner—personalised Maths, Reading and SPaG for ages 5–14. ${LOCAL_AREA_META}`,
 };
@@ -99,11 +99,11 @@ export default function AboutPage() {
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-slate-600">
                 Brighter Futures Tutoring exists to make high-quality,
-                personalised teaching accessible and welcoming to families in
-                and around Greater Manchester. We plan sessions around your
-                child&apos;s pace and goals, celebrate progress along the way,
-                and keep communication open with families; so you always know how
-                things are going.
+                personalised teaching accessible and welcoming to families{" "}
+                {LOCAL_AREA_PHRASE}. We plan sessions around your child&apos;s
+                pace and goals, celebrate progress along the way, and keep
+                communication open with families; so you always know how things
+                are going.
               </p>
             </div>
             <ul className="mx-auto mt-12 grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -111,7 +111,7 @@ export default function AboutPage() {
                 "Personalised teaching that adapts to each learner",
                 "Clear structure with space for curiosity and fun",
                 "Regular updates on progress and next steps",
-                "Tutoring available across Greater Manchester and nearby areas",
+                `Tutoring available across ${LOCAL_AREA}`,
                 "One-to-one, group and home-ed options",
                 "Support for core literacy and numeracy skills",
                 "A calm, encouraging environment to build confidence",

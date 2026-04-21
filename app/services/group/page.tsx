@@ -6,13 +6,12 @@ import { SERVICE_IMAGE_GROUP } from "@/lib/service-images";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbListJsonLd, serviceJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
-import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
-import { LOCAL_AREA_META } from "@/lib/site-location";
+import { LOCAL_AREA_META, LOCAL_AREA_PHRASE } from "@/lib/site-location";
 
 const PAGE_DESCRIPTION = `Support your child's learning in a fun, structured group environment with expert teaching and peer interaction. ${LOCAL_AREA_META}`;
 
 export const metadata: Metadata = {
-  title: "Group Tutoring Sessions | Brighter Futures Tutoring",
+  title: "Group Tutoring Sessions",
   description: PAGE_DESCRIPTION,
 };
 
@@ -94,7 +93,8 @@ export default function GroupSessionsPage() {
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/90">
                 Support your child&apos;s learning in a fun, structured and
-                encouraging group environment. Sessions run for families across ${LOCAL_AREA_META}.
+                encouraging group environment. Sessions run for families{" "}
+                {LOCAL_AREA_PHRASE}.
               </p>
               <Link
                 href="/contact?service=group"

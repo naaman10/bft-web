@@ -13,7 +13,7 @@ import { LOCAL_AREA_META } from "@/lib/site-location";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "FAQs | Brighter Futures Tutoring",
+  title: "FAQs",
   description: `Answers about sessions, learning, progress, home education and booking. ${LOCAL_AREA_META}`,
 };
 

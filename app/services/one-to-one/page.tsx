@@ -12,7 +12,7 @@ import { LOCAL_AREA_META } from "@/lib/site-location";
 const PAGE_DESCRIPTION = `Fun, engaging and fully personalised one-to-one tutoring in Maths, Reading and SPaG. ${LOCAL_AREA_META}`;
 
 export const metadata: Metadata = {
-  title: "1:1 Tutoring | Brighter Futures Tutoring",
+  title: "1:1 Tutoring",
   description: PAGE_DESCRIPTION,
 };
 

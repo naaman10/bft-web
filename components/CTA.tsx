@@ -1,3 +1,5 @@
+import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
+
 interface CTAProps {
   headline?: string;
   subtext?: string;
@@ -7,7 +9,7 @@ interface CTAProps {
 
 export function CTA({
   headline = "Ready to Support Your Child's Learning?",
-  subtext = "Enquire today to secure one of our limited tutoring spaces in and around Greater Manchester.",
+  subtext = `Enquire today to secure one of our limited tutoring spaces ${LOCAL_AREA_PHRASE}.`,
   buttonLabel = "Get Started",
   buttonHref = "/contact",
 }: CTAProps) {

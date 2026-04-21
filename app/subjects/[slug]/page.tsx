@@ -7,7 +7,6 @@ import { breadcrumbListJsonLd } from "@/lib/json-ld";
 import { isSubjectsFeatureEnabled } from "@/lib/feature-flags";
 import { SUBJECTS, type SubjectSlug, isSubjectSlug } from "@/lib/subjects";
 import { getSiteUrl } from "@/lib/site";
-import { LOCAL_AREA_META } from "@/lib/site-location";
 
 type Props = {
   params: { slug: string };
@@ -25,12 +24,12 @@ export function generateMetadata({ params }: Props): Metadata {
     notFound();
   }
   if (!isSubjectSlug(params.slug)) {
-    return { title: "Subject | Brighter Futures Tutoring" };
+    return { title: "Subject" };
   }
   const s = SUBJECTS[params.slug];
   return {
     title: s.metaTitle,
-    description: `${s.metaDescription} ${LOCAL_AREA_META}`.trim(),
+    description: s.metaDescription,
   };
 }
 

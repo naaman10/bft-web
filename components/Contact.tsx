@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
 
 interface ContactProps {
   headline: string;
@@ -15,8 +16,7 @@ export function Contact({ headline, email, phone }: ContactProps) {
         </h2>
         <p className="mt-4 text-slate-600 dark:text-slate-300">
           Get in touch to discuss how we can support your child&apos;s
-          learning—we work with families in and around the Greater Manchester
-          area.
+          learning—we work with families {LOCAL_AREA_PHRASE}.
         </p>
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
           <Link

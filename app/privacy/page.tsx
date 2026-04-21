@@ -8,7 +8,7 @@ import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Brighter Futures Tutoring",
+  title: "Privacy Policy",
   description: `How we collect, use and protect personal information. ${LOCAL_AREA_META}`,
 };
 

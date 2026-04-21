@@ -1,3 +1,5 @@
+import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
+
 export const SUBJECT_SLUGS = ["english", "maths", "11-plus-preparation"] as const;
 
 export type SubjectSlug = (typeof SUBJECT_SLUGS)[number];
@@ -18,9 +20,8 @@ export const SUBJECTS: Record<SubjectSlug, SubjectDefinition> = {
   english: {
     slug: "english",
     label: "English",
-    metaTitle: "English Tutoring | Brighter Futures Tutoring",
-    metaDescription:
-      "Confident reading, writing and SPaG support with engaging English tutoring for ages 5–14 in Greater Manchester and nearby areas.",
+    metaTitle: "English Tutoring",
+    metaDescription: `Confident reading, writing and SPaG support with engaging English tutoring for ages 5–14 ${LOCAL_AREA_PHRASE}.`,
     heroEyebrow: "English tutoring",
     h1: "Build literacy confidence with tailored English support",
     intro:
@@ -34,9 +35,8 @@ export const SUBJECTS: Record<SubjectSlug, SubjectDefinition> = {
   maths: {
     slug: "maths",
     label: "Maths",
-    metaTitle: "Maths Tutoring | Brighter Futures Tutoring",
-    metaDescription:
-      "Friendly, structured Maths tutoring for ages 5–14—number sense, reasoning and exam confidence in Greater Manchester and the surrounding area.",
+    metaTitle: "Maths Tutoring",
+    metaDescription: `Friendly, structured Maths tutoring for ages 5–14—number sense, reasoning and exam confidence ${LOCAL_AREA_PHRASE}.`,
     heroEyebrow: "Maths tutoring",
     h1: "Make sense of Maths with patient, structured support",
     intro:
@@ -50,9 +50,8 @@ export const SUBJECTS: Record<SubjectSlug, SubjectDefinition> = {
   "11-plus-preparation": {
     slug: "11-plus-preparation",
     label: "11+ Preparation",
-    metaTitle: "11+ Preparation Tutoring | Brighter Futures Tutoring",
-    metaDescription:
-      "Focused 11+ preparation in English, Maths, verbal and non-verbal reasoning—supportive tuition for families in Greater Manchester and nearby.",
+    metaTitle: "11+ Preparation Tutoring",
+    metaDescription: `Focused 11+ preparation in English, Maths, verbal and non-verbal reasoning—supportive tuition for families ${LOCAL_AREA_PHRASE}.`,
     heroEyebrow: "11+ preparation",
     h1: "11+ preparation that balances rigour with reassurance",
     intro:

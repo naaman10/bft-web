@@ -1,10 +1,10 @@
+import { LOCAL_AREA_PHRASE, localAreaServedJsonLd } from "@/lib/site-location";
+
 const ORG_NAME = "Brighter Futures Tutoring";
 
-const ORG_DESCRIPTION =
-  "Personalised Maths, Reading and SPaG tutoring for children aged 5–14. One-to-one, group and home-ed sessions in Greater Manchester.";
+const ORG_DESCRIPTION = `Personalised Maths, Reading and SPaG tutoring for children aged 5–14. One-to-one, group and home-ed sessions ${LOCAL_AREA_PHRASE}.`;
 
-const WEBSITE_DESCRIPTION =
-  "Fun, engaging tutoring for ages 5–14 in Maths, Reading and SPaG. One-to-one, group and home-ed options.";
+const WEBSITE_DESCRIPTION = `Fun, engaging tutoring for ages 5–14 in Maths, Reading and SPaG. One-to-one, group and home-ed options. ${LOCAL_AREA_PHRASE}.`;
 
 /** Stable @id for Organization — referenced by WebSite `publisher` and elsewhere. */
 export function organizationId(siteUrl: string): string {
@@ -25,10 +25,7 @@ function organizationEntity(siteUrl: string) {
       "@type": "ImageObject",
       url: `${base}/favicons/android-chrome-512x512.png`,
     },
-    areaServed: {
-      "@type": "AdministrativeArea",
-      name: "Greater Manchester",
-    },
+    areaServed: localAreaServedJsonLd(),
   };
 }
 
@@ -140,7 +137,6 @@ export function contactPageLocalBusinessJsonLd(siteUrl: string) {
         "@id": orgId,
         address: {
           "@type": "PostalAddress",
-          addressLocality: "Greater Manchester",
           addressRegion: "England",
           addressCountry: "GB",
         },
@@ -205,10 +201,7 @@ export function serviceJsonLd(siteUrl: string, service: ServiceForJsonLd) {
     url: pageUrl,
     serviceType: service.serviceType,
     provider: { "@id": orgId },
-    areaServed: {
-      "@type": "AdministrativeArea",
-      name: "Greater Manchester",
-    },
+    areaServed: localAreaServedJsonLd(),
   };
 
   if (service.image) {
