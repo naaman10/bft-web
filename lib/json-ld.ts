@@ -38,6 +38,38 @@ export function homeOrganizationWebSiteJsonLd(siteUrl: string) {
 
 export type BreadcrumbItem = { name: string; path: string };
 
+export type FaqForJsonLd = {
+  question: string;
+  /** Plain-text answer for schema.org (from rich text). */
+  answerPlain: string;
+};
+
+/** FAQPage JSON-LD — omit entries with empty `answerPlain`. */
+export function faqPageJsonLd(siteUrl: string, faqs: FaqForJsonLd[]) {
+  const pageUrl = `${siteUrl.replace(/\/$/, "")}/faq`;
+  const mainEntity = faqs
+    .filter((f) => f.question.trim() && f.answerPlain.trim())
+    .map((f) => ({
+      "@type": "Question",
+      name: f.question.trim(),
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.answerPlain.trim(),
+      },
+    }));
+
+  if (mainEntity.length === 0) {
+    return null;
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    url: pageUrl,
+    mainEntity,
+  };
+}
+
 /** Inner pages: BreadcrumbList — paths must start with `/`. */
 export function breadcrumbListJsonLd(siteUrl: string, items: BreadcrumbItem[]) {
   return {

@@ -55,6 +55,18 @@ export interface ReviewEntry {
   location?: string;
 }
 
+/** Content type **faQs** (FAQs) — field API IDs match Contentful model. */
+export interface FaqEntry {
+  id: string;
+  entryName: string;
+  question: string;
+  answer: Document;
+  /** When true, include in FAQPage JSON-LD (default in CMS is true). */
+  enableStructuredData: boolean;
+  active: boolean;
+  category: string;
+}
+
 /** Fetch a single entry by ID */
 export async function getEntry<T = Record<string, unknown>>(
   entryId: string,
@@ -97,6 +109,9 @@ export async function getHomePage(locale = "en-US"): Promise<HomePage | null> {
 /** Content type API ID in Contentful (often `review`; override if yours differs). */
 const REVIEW_CONTENT_TYPE =
   process.env.CONTENTFUL_REVIEW_CONTENT_TYPE?.trim() || "Reviews";
+
+const FAQ_CONTENT_TYPE =
+  process.env.CONTENTFUL_FAQ_CONTENT_TYPE?.trim() || "faQs";
 
 /** Optional; if unset, the Delivery API uses your space default locale (avoids empty fields when entries are only in e.g. `en-GB`). */
 const REVIEW_LOCALE = process.env.CONTENTFUL_LOCALE?.trim();
@@ -275,6 +290,74 @@ export async function getReviews(limit = 50): Promise<ReviewEntry[]> {
     return out;
   } catch (err) {
     console.error("[contentful:reviews] getEntries failed:", err);
+    return [];
+  }
+}
+
+function faqDebugEnabled(): boolean {
+  return (
+    process.env.CONTENTFUL_DEBUG === "1" ||
+    process.env.NODE_ENV === "development"
+  );
+}
+
+/** Published FAQ entries (active only). Empty if Contentful is unset or on error. */
+export async function getFaqs(limit = 200): Promise<FaqEntry[]> {
+  if (!space || !accessToken) {
+    if (faqDebugEnabled()) {
+      console.log(
+        "[contentful:faqs] Skipping fetch: CONTENTFUL_SPACE_ID or CONTENTFUL_ACCESS_TOKEN is not set."
+      );
+    }
+    return [];
+  }
+
+  try {
+    const client = getClient();
+    const res = await client.getEntries({
+      content_type: FAQ_CONTENT_TYPE,
+      limit,
+      include: 2,
+      ...(REVIEW_LOCALE ? { locale: REVIEW_LOCALE } : {}),
+    });
+
+    const out: FaqEntry[] = [];
+    for (const item of res.items) {
+      const f = item.fields as Record<string, unknown>;
+      const question =
+        typeof f.question === "string" ? f.question.trim() : "";
+      const entryName =
+        typeof f.entryName === "string" ? f.entryName.trim() : "";
+      const category =
+        typeof f.category === "string" ? f.category.trim() : "";
+      const answer = firstRichTextField(f, ["answer"]);
+      const active = f.active === false ? false : true;
+      const enableStructuredData =
+        f.enableStructuredData === false ? false : true;
+
+      if (!question || !answer || !category) {
+        continue;
+      }
+      if (!active) continue;
+
+      out.push({
+        id: item.sys.id,
+        entryName: entryName || question,
+        question,
+        answer,
+        enableStructuredData,
+        active,
+        category,
+      });
+    }
+
+    if (faqDebugEnabled()) {
+      console.log(`[contentful:faqs] Mapped ${out.length} FAQ(s).`);
+    }
+
+    return out;
+  } catch (err) {
+    console.error("[contentful:faqs] getEntries failed:", err);
     return [];
   }
 }
