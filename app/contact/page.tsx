@@ -63,8 +63,7 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/90">
               Tell us a little about your child and what you&apos;re looking
-              for. We support families in and around the Greater Manchester area
-              and will get back to you as soon as we can.
+              for and we will get back to you as soon as we can.
             </p>
           </div>
         </section>

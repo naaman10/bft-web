@@ -4,14 +4,16 @@ import { Footer } from "@/components/Footer";
 import { ServiceHeroImage } from "@/components/ServiceHeroImage";
 import { SERVICE_IMAGE_ONE_TO_ONE } from "@/lib/service-images";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import { breadcrumbListJsonLd, serviceJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
+import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
 import { LOCAL_AREA_META } from "@/lib/site-location";
+
+const PAGE_DESCRIPTION = `Fun, engaging and fully personalised one-to-one tutoring in Maths, Reading and SPaG. ${LOCAL_AREA_META}`;
 
 export const metadata: Metadata = {
   title: "1:1 Tutoring | Brighter Futures Tutoring",
-  description:
-    `Fun, engaging and fully personalised one-to-one tutoring in Maths, Reading and SPaG. ${LOCAL_AREA_META}`,
+  description: PAGE_DESCRIPTION,
 };
 
 function ImagePlaceholderLight({ label }: { label: string }) {
@@ -37,6 +39,15 @@ export default function OneToOnePage() {
           { name: "1:1 tutoring", path: "/services/one-to-one" },
         ])}
       />
+      <JsonLd
+        data={serviceJsonLd(siteUrl, {
+          path: "/services/one-to-one",
+          name: "One-to-one tutoring",
+          description: PAGE_DESCRIPTION,
+          serviceType: "One-to-one tutoring",
+          image: SERVICE_IMAGE_ONE_TO_ONE,
+        })}
+      />
       {/* Hero — gradient band + asymmetric split */}
       <main>
         <section
@@ -60,8 +71,7 @@ export default function OneToOnePage() {
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/90">
                 Each 60-minute session is tailored to your child&apos;s
                 individual needs, helping them build skills, confidence and
-                enjoyment in learning at their own pace—available to families in
-                and around Greater Manchester.
+                enjoyment in learning at their own pace—available to families {LOCAL_AREA_PHRASE}.
               </p>
               <Link
                 href="/contact?service=one-to-one"

@@ -4,14 +4,16 @@ import { Footer } from "@/components/Footer";
 import { ServiceHeroImage } from "@/components/ServiceHeroImage";
 import { SERVICE_IMAGE_GROUP } from "@/lib/service-images";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import { breadcrumbListJsonLd, serviceJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
+import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
 import { LOCAL_AREA_META } from "@/lib/site-location";
+
+const PAGE_DESCRIPTION = `Support your child's learning in a fun, structured group environment with expert teaching and peer interaction. ${LOCAL_AREA_META}`;
 
 export const metadata: Metadata = {
   title: "Group Tutoring Sessions | Brighter Futures Tutoring",
-  description:
-    `Support your child's learning in a fun, structured group environment with expert teaching and peer interaction. ${LOCAL_AREA_META}`,
+  description: PAGE_DESCRIPTION,
 };
 
 function ImagePlaceholderLight({ label }: { label: string }) {
@@ -62,6 +64,15 @@ export default function GroupSessionsPage() {
           { name: "Group tutoring", path: "/services/group" },
         ])}
       />
+      <JsonLd
+        data={serviceJsonLd(siteUrl, {
+          path: "/services/group",
+          name: "Group tutoring sessions",
+          description: PAGE_DESCRIPTION,
+          serviceType: "Group tutoring",
+          image: SERVICE_IMAGE_GROUP,
+        })}
+      />
       <main>
         <section
           className="relative -mt-[var(--site-header-height)] overflow-hidden pt-28 md:pt-32"
@@ -83,8 +94,7 @@ export default function GroupSessionsPage() {
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/90">
                 Support your child&apos;s learning in a fun, structured and
-                encouraging group environment. Sessions run for families across
-                Greater Manchester and nearby areas.
+                encouraging group environment. Sessions run for families across ${LOCAL_AREA_META}.
               </p>
               <Link
                 href="/contact?service=group"

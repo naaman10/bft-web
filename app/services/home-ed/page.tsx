@@ -4,14 +4,16 @@ import { Footer } from "@/components/Footer";
 import { ServiceHeroImage } from "@/components/ServiceHeroImage";
 import { SERVICE_IMAGE_HOME_ED } from "@/lib/service-images";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import { breadcrumbListJsonLd, serviceJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
+import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
 import { LOCAL_AREA_META } from "@/lib/site-location";
+
+const PAGE_DESCRIPTION = `A personalised approach to home education—bespoke curriculum and flexible support. ${LOCAL_AREA_META}`;
 
 export const metadata: Metadata = {
   title: "Home Education Sessions | Brighter Futures Tutoring",
-  description:
-    `A personalised approach to home education—bespoke curriculum and flexible support. ${LOCAL_AREA_META}`,
+  description: PAGE_DESCRIPTION,
 };
 
 function ImagePlaceholderLight({ label }: { label: string }) {
@@ -62,6 +64,15 @@ export default function HomeEdSessionsPage() {
           { name: "Home education", path: "/services/home-ed" },
         ])}
       />
+      <JsonLd
+        data={serviceJsonLd(siteUrl, {
+          path: "/services/home-ed",
+          name: "Home education sessions",
+          description: PAGE_DESCRIPTION,
+          serviceType: "Home education tutoring",
+          image: SERVICE_IMAGE_HOME_ED,
+        })}
+      />
       <main>
         <section
           className="relative -mt-[var(--site-header-height)] overflow-hidden pt-28 md:pt-32"
@@ -83,8 +94,7 @@ export default function HomeEdSessionsPage() {
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/90">
                 A personalised approach to learning, designed entirely around
-                your child—supporting home-educating families in and around
-                Greater Manchester.
+                your child—supporting home-educating families {LOCAL_AREA_META}.
               </p>
               <Link
                 href="/contact?service=home-ed"

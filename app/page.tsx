@@ -11,6 +11,7 @@ import type { Service } from "@/lib/contentful";
 import { JsonLd } from "@/components/JsonLd";
 import { webSiteJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
+import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
 // Revalidate at most every 60s so Contentful updates appear without redeploying
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
 const defaults = {
   heroHeadline: "Helping Your Child Build Confidence & Thrive",
   heroSubtext:
-    "Fun, engaging and personalised tutoring for ages 5–14 in Maths, Reading and SPaG—available to families in and around the Greater Manchester area.",
+    `Fun, engaging and personalised tutoring for ages 5–14 in Maths, Reading and SPaG—available to families ${LOCAL_AREA_PHRASE}.`,
   ctaLabel: "Book a Session",
   secondaryCtaLabel: "Learn More",
   urgencyText: "Limited availability – secure your space today",

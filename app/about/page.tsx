@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
-import { LOCAL_AREA_META } from "@/lib/site-location";
+import { LOCAL_AREA_META, LOCAL_AREA_PHRASE } from "@/lib/site-location";
 
 const LOGO_URL =
   "https://res.cloudinary.com/njh101010/image/upload/v1773761306/brighterfutures/bft-logo-no-text-sun.png";
@@ -63,8 +63,7 @@ export default function AboutPage() {
                 Whether you choose one-to-one lessons, small group sessions or
                 home education support, our focus is the same: a positive,
                 structured experience where every learner feels seen and
-                supported. We welcome families from across Greater Manchester
-                and nearby communities.
+                supported. We welcome families from {LOCAL_AREA_PHRASE}.
               </p>
               <Link
                 href="/contact"

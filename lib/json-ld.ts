@@ -177,3 +177,43 @@ export function breadcrumbListJsonLd(siteUrl: string, items: BreadcrumbItem[]) {
     }),
   };
 }
+
+export type ServiceForJsonLd = {
+  /** URL path e.g. `/services/one-to-one` */
+  path: string;
+  name: string;
+  description: string;
+  /** Short label for the kind of service (schema.org `serviceType`). */
+  serviceType: string;
+  /** Hero or listing image URL */
+  image?: string;
+};
+
+/** Service JSON-LD — `provider` references layout `organizationJsonLd` (`#organization`). */
+export function serviceJsonLd(siteUrl: string, service: ServiceForJsonLd) {
+  const base = siteUrl.replace(/\/$/, "");
+  const orgId = organizationId(base);
+  const path = service.path.startsWith("/") ? service.path : `/${service.path}`;
+  const pageUrl = `${base}${path}`;
+
+  const node: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${pageUrl}#service`,
+    name: service.name,
+    description: service.description,
+    url: pageUrl,
+    serviceType: service.serviceType,
+    provider: { "@id": orgId },
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: "Greater Manchester",
+    },
+  };
+
+  if (service.image) {
+    node.image = service.image;
+  }
+
+  return node;
+}
