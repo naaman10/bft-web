@@ -1,8 +1,32 @@
 import type { MetadataRoute } from "next";
+import { isSubjectsFeatureEnabled } from "@/lib/feature-flags";
 import { getSiteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = getSiteUrl();
+
+  const subjectRoutes: MetadataRoute.Sitemap = isSubjectsFeatureEnabled()
+    ? [
+        {
+          url: `${base}/subjects/english`,
+          lastModified: new Date(),
+          changeFrequency: "monthly",
+          priority: 0.85,
+        },
+        {
+          url: `${base}/subjects/maths`,
+          lastModified: new Date(),
+          changeFrequency: "monthly",
+          priority: 0.85,
+        },
+        {
+          url: `${base}/subjects/11-plus-preparation`,
+          lastModified: new Date(),
+          changeFrequency: "monthly",
+          priority: 0.85,
+        },
+      ]
+    : [];
 
   const routes: MetadataRoute.Sitemap = [
     {
@@ -47,6 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.85,
     },
+    ...subjectRoutes,
   ];
 
   return routes;

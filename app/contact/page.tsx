@@ -41,7 +41,7 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
       />
       <main>
         <section
-          className="relative overflow-hidden pt-28 md:pt-32"
+          className="relative -mt-[var(--site-header-height)] overflow-hidden pt-28 md:pt-32"
           style={{
             background:
               "linear-gradient(135deg, #2980B9 0%, #6DD5FA 55%, #7ec8e3 100%)",
@@ -75,9 +75,7 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
                 Fill in the form below and we&apos;ll reply as soon as we can.
               </p>
             </div>
-            <ContactPageForm
-              initialServiceInterest={initialServiceInterest}
-            />
+            <ContactPageForm initialServiceInterest={initialServiceInterest} />
             <p className="mt-8 border-t border-slate-100 pt-8 text-center text-sm text-slate-500">
               Prefer to browse first?{" "}
               <Link

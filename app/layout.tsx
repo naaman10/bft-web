@@ -1,16 +1,25 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import { Suspense } from "react";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { LayoutRootFix } from "@/components/LayoutRootFix";
+import { TermlyCMP } from "@/components/TermlyCMP";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
-const TERMLY_WEBSITE_UUID = "0a6a6e27-c09c-41a7-82db-79117b51814c";
+/** Termly dashboard website UUID — override with `NEXT_PUBLIC_TERMLY_WEBSITE_UUID`. */
+const TERMLY_WEBSITE_UUID =
+  process.env.NEXT_PUBLIC_TERMLY_WEBSITE_UUID ??
+  "0a6a6e27-c09c-41a7-82db-79117b51814c";
+
+const TERMLY_RESOURCE_BLOCKER_SRC = `https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}?autoBlock=on`;
 
 /** Google Analytics (gtag.js) measurement ID */
 const GA_MEASUREMENT_ID = "G-E2HM8PF27M";
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
@@ -55,14 +64,27 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen font-sans antialiased">
+      <body
+        className="m-0 min-h-screen p-0 font-sans antialiased"
+        suppressHydrationWarning
+      >
+        {/* Single load, as early as Next allows — avoids duplicate client injection + Termly errors */}
         <Script
           id="termly-resource-blocker"
           strategy="beforeInteractive"
-          src={`https://app.termly.io/resource-blocker/${TERMLY_WEBSITE_UUID}?autoBlock=on`}
+          src={TERMLY_RESOURCE_BLOCKER_SRC}
         />
-        <Header />
-        {children}
+        <div
+          id="site-shell"
+          className="relative flex min-h-dvh flex-col overflow-x-clip"
+        >
+          <Header />
+          <div className="min-h-0 flex-1">{children}</div>
+        </div>
+        <Suspense fallback={null}>
+          <TermlyCMP />
+        </Suspense>
+        <LayoutRootFix />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
           strategy="afterInteractive"

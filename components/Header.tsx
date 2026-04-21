@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
+import { isSubjectsFeatureEnabled } from "@/lib/feature-flags";
+import { subjectNavLinks } from "@/lib/subjects";
 
 interface HeaderProps {
   siteName?: string;
@@ -14,12 +16,22 @@ const serviceLinks = [
 ] as const;
 
 export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) {
+  const subjectsEnabled = isSubjectsFeatureEnabled();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileSubjectsOpen, setMobileSubjectsOpen] = useState(false);
   const mobileNavId = useId();
   const mobileServicesPanelId = useId();
   const mobileServicesLabelId = useId();
+  const mobileSubjectsPanelId = useId();
+  const mobileSubjectsLabelId = useId();
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+    setMobileServicesOpen(false);
+    setMobileSubjectsOpen(false);
+  };
 
   useEffect(() => {
     const getScrollY = () => {
@@ -58,16 +70,11 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
   useEffect(() => {
     if (!mobileMenuOpen) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileMenuOpen(false);
+      if (e.key === "Escape") closeMobileMenu();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [mobileMenuOpen]);
-
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-    setMobileServicesOpen(false);
-  };
 
   const headerLinkClass = (isScrolled: boolean) =>
     [
@@ -88,10 +95,10 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
   return (
     <header
       className={[
-        "fixed inset-x-0 top-0 z-50 w-full transition-colors duration-300",
+        "sticky top-0 z-50 w-full transition-colors duration-300",
         scrolled
           ? "border-b border-slate-200 bg-white shadow-sm backdrop-blur-md"
-          : "border-b border-transparent bg-transparent",
+          : "bg-transparent",
       ].join(" ")}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -150,6 +157,36 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
               </div>
             </div>
           </div>
+          {subjectsEnabled ? (
+            <div className="relative group">
+              <button
+                type="button"
+                className={[
+                  "flex items-center gap-1 py-1 text-sm font-medium transition-colors duration-300",
+                  scrolled
+                    ? "text-slate-600 hover:text-primary-600"
+                    : "text-white/90 hover:text-white",
+                ].join(" ")}
+              >
+                Subjects
+                <span className="text-xs">▾</span>
+              </button>
+              <div className="absolute left-0 top-full w-56 pt-2" aria-hidden />
+              <div className="pointer-events-none absolute left-0 top-full w-56 pt-2 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+                <div className="rounded-xl border border-slate-200 bg-white/95 py-2 shadow-lg">
+                  {subjectNavLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="block px-4 py-2.5 text-sm text-slate-700 first:rounded-t-lg last:rounded-b-lg hover:bg-slate-50"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : null}
           <Link href="/about" className={headerLinkClass(scrolled)}>
             About
           </Link>
@@ -172,8 +209,9 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
         aria-modal="true"
         aria-label="Main menu"
         className={[
-          "fixed inset-0 z-[100] flex flex-col bg-white md:hidden",
-          mobileMenuOpen ? "visible" : "invisible pointer-events-none",
+          "fixed inset-0 z-[100] bg-white md:hidden",
+          // When closed, `hidden` removes the overlay from hit-testing so the hamburger works.
+          mobileMenuOpen ? "flex flex-col" : "hidden",
         ].join(" ")}
         aria-hidden={!mobileMenuOpen}
       >
@@ -247,6 +285,56 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
               </ul>
             </div>
           </div>
+
+          {subjectsEnabled ? (
+            <div className="pb-2">
+              <button
+                type="button"
+                id={mobileSubjectsLabelId}
+                className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                aria-expanded={mobileSubjectsOpen}
+                aria-controls={mobileSubjectsPanelId}
+                onClick={() => setMobileSubjectsOpen((o) => !o)}
+              >
+                <span>Subjects</span>
+                <svg
+                  className={[
+                    "h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200",
+                    mobileSubjectsOpen ? "rotate-180" : "",
+                  ].join(" ")}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  aria-hidden
+                >
+                  <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <div
+                id={mobileSubjectsPanelId}
+                role="region"
+                aria-labelledby={mobileSubjectsLabelId}
+                hidden={!mobileSubjectsOpen}
+                className="mt-2 pl-1"
+              >
+                <ul className="flex flex-col gap-1">
+                  {subjectNavLinks.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="block rounded-xl py-3 pl-4 pr-4 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                        onClick={closeMobileMenu}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : null}
+
           <Link
             href="/about"
             className="block rounded-xl px-4 py-4 text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"

@@ -30,7 +30,7 @@ export function Hero({
 }: HeroProps) {
   return (
     <section
-      className="relative overflow-hidden pb-20 pt-0 md:pb-28"
+      className="relative -mt-[var(--site-header-height)] overflow-hidden pb-20 pt-0 md:pb-28"
       style={{
         background: "linear-gradient(to bottom, #2980B9 0%, #6DD5FA 100%)",
       }}

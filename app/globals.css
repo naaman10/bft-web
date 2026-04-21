@@ -9,6 +9,12 @@
   --primary-foreground: #ffffff;
   --secondary: #F9D51B;
   --secondary-foreground: #0f172a;
+  /*
+    Matches the sticky header’s vertical size (py-4 + logo row). Used to pull
+    hero bands up so gradients still start at the viewport top while the header
+    stays in document flow (avoids fixed-header + body padding “gaps”).
+  */
+  --site-header-height: 4.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,11 +22,49 @@
     --foreground: #f1f5f9;
     --background: #0f172a;
   }
+
+  html,
+  body {
+    background-color: var(--background);
+  }
+}
+
+html {
+  margin: 0 !important;
+  padding: 0 !important;
+  scroll-padding-top: 0;
+  /*
+    Match the default page shell (e.g. min-h-screen bg-[#f9fafb]) so a thin strip
+    at the top isn’t a different color than white html/body vs gray content.
+  */
+  background-color: #f9fafb;
 }
 
 body {
+  margin: 0 !important;
+  padding: 0 !important;
   color: var(--foreground);
-  background: var(--background);
+  background-color: #f9fafb;
+  /* Block formatting context: stops margin collapse with first in-flow content. */
+  display: flow-root;
+  overflow-x: hidden;
+}
+
+/* Kill any collapsed top margin on the first in-flow child (often the page root div). */
+body > *:first-child {
+  margin-block-start: 0 !important;
+}
+
+main {
+  margin-block-start: 0;
+  /* Contain hero negative margins so they don’t collapse with the page wrapper. */
+  display: flow-root;
+}
+
+/* Fixed header: no border when transparent (1px border can read as a gap). */
+body > header {
+  margin: 0 !important;
+  padding-top: 0 !important;
 }
 
 @layer utilities {

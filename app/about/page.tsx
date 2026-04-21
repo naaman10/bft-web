@@ -33,7 +33,7 @@ export default function AboutPage() {
       <main>
         {/* Hero — organisation */}
         <section
-          className="relative overflow-hidden pt-28 md:pt-32"
+          className="relative -mt-[var(--site-header-height)] overflow-hidden pt-28 md:pt-32"
           style={{
             background:
               "linear-gradient(135deg, #2980B9 0%, #6DD5FA 55%, #7ec8e3 100%)",
