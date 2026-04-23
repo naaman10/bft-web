@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
+import { createPortal } from "react-dom";
 import { isSubjectsFeatureEnabled } from "@/lib/feature-flags";
 import { subjectNavLinks } from "@/lib/subjects";
 
@@ -21,6 +22,7 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [mobileSubjectsOpen, setMobileSubjectsOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const mobileNavId = useId();
   const mobileServicesPanelId = useId();
   const mobileServicesLabelId = useId();
@@ -32,6 +34,10 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
     setMobileServicesOpen(false);
     setMobileSubjectsOpen(false);
   };
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const getScrollY = () => {
@@ -205,166 +211,170 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
         </nav>
       </div>
 
-      {/* Mobile: full-screen menu */}
-      <div
-        id={mobileNavId}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Main menu"
-        className={[
-          "fixed inset-0 z-[100] bg-white md:hidden",
-          // When closed, `hidden` removes the overlay from hit-testing so the hamburger works.
-          mobileMenuOpen ? "flex flex-col" : "hidden",
-        ].join(" ")}
-        aria-hidden={!mobileMenuOpen}
-      >
-        <div className="flex shrink-0 items-center justify-between px-4 py-4 sm:px-6">
-          <Link
-            href="/"
-            className="font-serif text-xl font-bold text-slate-900"
-            onClick={closeMobileMenu}
-          >
-            {siteName}
-          </Link>
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-lg p-2 text-slate-800 transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white"
-            aria-label="Close menu"
-            onClick={closeMobileMenu}
-          >
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-              <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
-            </svg>
-          </button>
-        </div>
-
-        <nav
-          className="flex min-h-0 flex-1 flex-col overflow-y-auto px-6 py-10"
-          aria-label="Main"
-        >
-          <div className="pb-2">
-            <button
-              type="button"
-              id={mobileServicesLabelId}
-              className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
-              aria-expanded={mobileServicesOpen}
-              aria-controls={mobileServicesPanelId}
-              onClick={() => setMobileServicesOpen((o) => !o)}
-            >
-              <span>Services</span>
-              <svg
-                className={[
-                  "h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200",
-                  mobileServicesOpen ? "rotate-180" : "",
-                ].join(" ")}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                aria-hidden
-              >
-                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+      {isMounted
+        ? createPortal(
             <div
-              id={mobileServicesPanelId}
-              role="region"
-              aria-labelledby={mobileServicesLabelId}
-              hidden={!mobileServicesOpen}
-              className="mt-2 pl-1"
+              id={mobileNavId}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Main menu"
+              className={[
+                "fixed inset-0 z-[100] bg-white md:hidden",
+                // When closed, `hidden` removes the overlay from hit-testing so the hamburger works.
+                mobileMenuOpen ? "flex flex-col" : "hidden",
+              ].join(" ")}
+              aria-hidden={!mobileMenuOpen}
             >
-              <ul className="flex flex-col gap-1">
-                {serviceLinks.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="block rounded-xl py-3 pl-4 pr-4 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 active:bg-slate-100"
-                      onClick={closeMobileMenu}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {subjectsEnabled ? (
-            <div className="pb-2">
-              <button
-                type="button"
-                id={mobileSubjectsLabelId}
-                className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
-                aria-expanded={mobileSubjectsOpen}
-                aria-controls={mobileSubjectsPanelId}
-                onClick={() => setMobileSubjectsOpen((o) => !o)}
-              >
-                <span>Subjects</span>
-                <svg
-                  className={[
-                    "h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200",
-                    mobileSubjectsOpen ? "rotate-180" : "",
-                  ].join(" ")}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden
+              <div className="flex shrink-0 items-center justify-between px-4 py-4 sm:px-6">
+                <Link
+                  href="/"
+                  className="font-serif text-xl font-bold text-slate-900"
+                  onClick={closeMobileMenu}
                 >
-                  <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              <div
-                id={mobileSubjectsPanelId}
-                role="region"
-                aria-labelledby={mobileSubjectsLabelId}
-                hidden={!mobileSubjectsOpen}
-                className="mt-2 pl-1"
-              >
-                <ul className="flex flex-col gap-1">
-                  {subjectNavLinks.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        className="block rounded-xl py-3 pl-4 pr-4 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 active:bg-slate-100"
-                        onClick={closeMobileMenu}
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                  {siteName}
+                </Link>
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-lg p-2 text-slate-800 transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white"
+                  aria-label="Close menu"
+                  onClick={closeMobileMenu}
+                >
+                  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+                    <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+                  </svg>
+                </button>
               </div>
-            </div>
-          ) : null}
 
-          <Link
-            href="/about"
-            className="block rounded-xl px-4 py-4 text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
-            onClick={closeMobileMenu}
-          >
-            About
-          </Link>
+              <nav
+                className="flex min-h-0 flex-1 flex-col overflow-y-auto px-6 py-10"
+                aria-label="Main"
+              >
+                <div className="pb-2">
+                  <button
+                    type="button"
+                    id={mobileServicesLabelId}
+                    className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                    aria-expanded={mobileServicesOpen}
+                    aria-controls={mobileServicesPanelId}
+                    onClick={() => setMobileServicesOpen((o) => !o)}
+                  >
+                    <span>Services</span>
+                    <svg
+                      className={[
+                        "h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200",
+                        mobileServicesOpen ? "rotate-180" : "",
+                      ].join(" ")}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden
+                    >
+                      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                  <div
+                    id={mobileServicesPanelId}
+                    role="region"
+                    aria-labelledby={mobileServicesLabelId}
+                    hidden={!mobileServicesOpen}
+                    className="mt-2 pl-1"
+                  >
+                    <ul className="flex flex-col gap-1">
+                      {serviceLinks.map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            className="block rounded-xl py-3 pl-4 pr-4 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                            onClick={closeMobileMenu}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
 
-          <Link
-            href="/faq"
-            className="block rounded-xl px-4 py-4 text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
-            onClick={closeMobileMenu}
-          >
-            FAQs
-          </Link>
+                {subjectsEnabled ? (
+                  <div className="pb-2">
+                    <button
+                      type="button"
+                      id={mobileSubjectsLabelId}
+                      className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                      aria-expanded={mobileSubjectsOpen}
+                      aria-controls={mobileSubjectsPanelId}
+                      onClick={() => setMobileSubjectsOpen((o) => !o)}
+                    >
+                      <span>Subjects</span>
+                      <svg
+                        className={[
+                          "h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200",
+                          mobileSubjectsOpen ? "rotate-180" : "",
+                        ].join(" ")}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        aria-hidden
+                      >
+                        <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    <div
+                      id={mobileSubjectsPanelId}
+                      role="region"
+                      aria-labelledby={mobileSubjectsLabelId}
+                      hidden={!mobileSubjectsOpen}
+                      className="mt-2 pl-1"
+                    >
+                      <ul className="flex flex-col gap-1">
+                        {subjectNavLinks.map((item) => (
+                          <li key={item.href}>
+                            <Link
+                              href={item.href}
+                              className="block rounded-xl py-3 pl-4 pr-4 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                              onClick={closeMobileMenu}
+                            >
+                              {item.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ) : null}
 
-          <div className="mt-6 flex-1" />
+                <Link
+                  href="/about"
+                  className="block rounded-xl px-4 py-4 text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                  onClick={closeMobileMenu}
+                >
+                  About
+                </Link>
 
-          <Link
-            href="/contact"
-            className="mb-4 block rounded-xl bg-primary-500 px-4 py-4 text-center text-lg font-semibold text-white shadow-sm transition-colors hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white"
-            onClick={closeMobileMenu}
-          >
-            Get Started
-          </Link>
-        </nav>
-      </div>
+                <Link
+                  href="/faq"
+                  className="block rounded-xl px-4 py-4 text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                  onClick={closeMobileMenu}
+                >
+                  FAQs
+                </Link>
+
+                <div className="mt-6 flex-1" />
+
+                <Link
+                  href="/contact"
+                  className="mb-4 block rounded-xl bg-primary-500 px-4 py-4 text-center text-lg font-semibold text-white shadow-sm transition-colors hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white"
+                  onClick={closeMobileMenu}
+                >
+                  Get Started
+                </Link>
+              </nav>
+            </div>,
+            document.body
+          )
+        : null}
     </header>
   );
 }
