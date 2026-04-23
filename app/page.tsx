@@ -9,7 +9,7 @@ import { Footer } from "@/components/Footer";
 import { getHomePage, getReviews } from "@/lib/contentful";
 import type { Service } from "@/lib/contentful";
 import { JsonLd } from "@/components/JsonLd";
-import { webSiteJsonLd } from "@/lib/json-ld";
+import { testimonialReviewsJsonLd, webSiteJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_PHRASE } from "@/lib/site-location";
 import { LOCAL_AREA_META } from "@/lib/site-location";
@@ -77,10 +77,12 @@ export default async function HomePage() {
 
   const c = content ?? defaults;
   const siteUrl = getSiteUrl();
+  const testimonialsJsonLd = testimonialReviewsJsonLd(siteUrl, reviews);
 
   return (
     <div className="min-h-screen bg-[#f9fafb] text-slate-800">
       <JsonLd data={webSiteJsonLd(siteUrl)} />
+      {testimonialsJsonLd ? <JsonLd data={testimonialsJsonLd} /> : null}
       <main>
         <Hero
           headline={c.heroHeadline}

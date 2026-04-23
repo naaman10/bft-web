@@ -1,4 +1,6 @@
 import { LOCAL_AREA_PHRASE, localAreaServedJsonLd } from "@/lib/site-location";
+import type { ReviewEntry } from "@/lib/contentful";
+import { documentToPlainText } from "@/lib/rich-text-plain";
 
 const ORG_NAME = "Brighter Futures Tutoring";
 
@@ -209,4 +211,53 @@ export function serviceJsonLd(siteUrl: string, service: ServiceForJsonLd) {
   }
 
   return node;
+}
+
+/**
+ * Homepage testimonial reviews as schema.org Review nodes.
+ * Rich-text review bodies are flattened to plain text for JSON-LD compliance.
+ */
+export function testimonialReviewsJsonLd(siteUrl: string, reviews: ReviewEntry[]) {
+  if (!reviews.length) return null;
+
+  const base = siteUrl.replace(/\/$/, "");
+  const orgId = organizationId(base);
+
+  const reviewNodes = reviews
+    .map((review) => {
+      const reviewBody = documentToPlainText(review.reviewText).trim();
+      if (!reviewBody || !review.parentName.trim()) return null;
+
+      const node: Record<string, unknown> = {
+        "@type": "Review",
+        "@id": `${base}/#review-${review.id}`,
+        itemReviewed: { "@id": orgId },
+        author: {
+          "@type": "Person",
+          name: review.parentName.trim(),
+        },
+        reviewBody,
+      };
+
+      if (review.location?.trim()) {
+        node.author = {
+          "@type": "Person",
+          name: review.parentName.trim(),
+          homeLocation: {
+            "@type": "Place",
+            name: review.location.trim(),
+          },
+        };
+      }
+
+      return node;
+    })
+    .filter((node): node is Record<string, unknown> => node !== null);
+
+  if (!reviewNodes.length) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": reviewNodes,
+  };
 }
