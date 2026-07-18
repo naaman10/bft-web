@@ -83,7 +83,51 @@ export default function SubjectPage({ params }: Props) {
           </div>
         </section>
 
-        <section className="relative -mt-6 px-6 pb-20 md:-mt-10 md:pb-24">
+        {subject.callout ? (
+          <section className="relative -mt-6 px-6 md:-mt-10">
+            <div
+              className="mx-auto max-w-6xl overflow-hidden rounded-3xl border-2 border-secondary-400/80 bg-gradient-to-br from-secondary-50 via-white to-primary-50/40 p-8 shadow-lg shadow-secondary-900/10 md:p-10 lg:p-12"
+              role="note"
+              aria-label={subject.callout.title}
+            >
+              <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-secondary-400 text-slate-900 shadow-sm"
+                  aria-hidden
+                >
+                  <svg
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-primary-700">
+                    {subject.callout.eyebrow}
+                  </p>
+                  <h2 className="mt-2 text-balance text-2xl font-bold text-slate-900 md:text-3xl">
+                    {subject.callout.title}
+                  </h2>
+                  <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-700">
+                    {subject.callout.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        <section
+          className={`relative px-6 pb-20 md:pb-24 ${subject.callout ? "pt-10 md:pt-14" : "-mt-6 md:-mt-10"}`}
+        >
           <div className="mx-auto max-w-6xl rounded-3xl border border-slate-200/80 bg-white p-8 shadow-xl shadow-slate-900/[0.06] md:p-12 lg:p-14">
             <div className="max-w-3xl">
               <p className="inline-block rounded-full bg-primary-100 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary-700">

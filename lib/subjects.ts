@@ -19,6 +19,12 @@ export type SubjectDefinition = {
     intro: string;
     points: readonly string[];
   }[];
+  /** Optional prominent callout (e.g. exam-format updates on 11+). */
+  callout?: {
+    eyebrow: string;
+    title: string;
+    description: string;
+  };
 };
 
 export const SUBJECTS: Record<SubjectSlug, SubjectDefinition> = {
@@ -207,6 +213,12 @@ export const SUBJECTS: Record<SubjectSlug, SubjectDefinition> = {
         ],
       },
     ],
+    callout: {
+      eyebrow: "Exam updates",
+      title: "Prepared for changes to the 11+",
+      description:
+        "11+ formats and requirements have updated for some grammar schools in England. Many schools have dropped verbal and non-verbal reasoning and replaced it with the FSCE (Future Stories Community Enterprise) format. We track those changes and adapt our preparation so your child practises the right skills, question styles and timing for what’s coming next.",
+    },
   },
 };
 
