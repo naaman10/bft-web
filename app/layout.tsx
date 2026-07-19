@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Suspense } from "react";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { HomeElevenPlusBanner } from "@/components/HomeElevenPlusBanner";
 import { JsonLd } from "@/components/JsonLd";
 import { LayoutRootFix } from "@/components/LayoutRootFix";
 import { TermlyCMP } from "@/components/TermlyCMP";
@@ -113,6 +114,7 @@ export default function RootLayout({
           id="site-shell"
           className="relative flex min-h-dvh flex-col overflow-x-clip"
         >
+          <HomeElevenPlusBanner />
           <Header />
           <div className="min-h-0 flex-1">{children}</div>
         </div>
