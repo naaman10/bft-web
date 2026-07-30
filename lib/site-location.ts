@@ -1,14 +1,14 @@
 /**
  * Local SEO / on-page copy — keep references to the service area consistent.
  */
-export const LOCAL_AREA = "Greater Manchester, Hull and East Yorkshire";
+export const LOCAL_AREA = "Hull, East Yorkshire and Greater Manchester";
 
 /** Use in sentences, e.g. "We support families …" */
-export const LOCAL_AREA_PHRASE = "in and around Greater Manchester, Hull and East Yorkshire";
+export const LOCAL_AREA_PHRASE = "in and around Hull, East Yorkshire and Greater Manchester";
 
 /** Short clause for meta descriptions */
 export const LOCAL_AREA_META =
-  "Tutoring for families in and around Greater Manchester, Hull and East Yorkshire";
+  "Tutoring for families in and around Hull, East Yorkshire and Greater Manchester";
 
 /** Region names for Schema.org `areaServed` (keep in sync with copy above). */
 export const LOCAL_AREA_SCHEMA_REGIONS = [
