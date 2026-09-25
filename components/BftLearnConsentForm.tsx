@@ -2,44 +2,58 @@
 
 import { useState } from "react";
 
+const API_ENDPOINT = "https://bft-api.onrender.com/web/bft-learn-consent";
+
 export function BftLearnConsentForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
   );
   const [errorMessage, setErrorMessage] = useState("");
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+
+  const isFormValid = email.trim() !== "" && consent;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    if (!isFormValid) {
+      setStatus("error");
+      setErrorMessage("Please provide your email and agree to the terms.");
+      return;
+    }
+
     setStatus("loading");
     setErrorMessage("");
 
-    const form = e.currentTarget;
-    const fd = new FormData(form);
-
     const payload = {
-      email: String(fd.get("email") ?? ""),
-      consent: fd.get("consent") === "on",
+      email: email.trim(),
+      consent: consent,
     };
 
-    // TODO: Implement API endpoint to handle consent form submission
     try {
-      // Simulating API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      // Replace this with actual API call:
-      // const res = await fetch("/api/bft-learn-consent", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(payload),
-      // });
+      const res = await fetch(API_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-      // For now, just show success
+      const body = (await res.json()) as { error?: string; message?: string };
+
+      if (!res.ok) {
+        setStatus("error");
+        setErrorMessage(
+          body.error || body.message || "Something went wrong. Please try again."
+        );
+        return;
+      }
+
       setStatus("success");
-      form.reset();
-    } catch {
+      setEmail("");
+      setConsent(false);
+    } catch (error) {
       setStatus("error");
-      setErrorMessage("Something went wrong. Please try again.");
+      setErrorMessage("Network error. Please check your connection and try again.");
     }
   }
 
@@ -60,6 +74,8 @@ export function BftLearnConsentForm() {
           type="email"
           autoComplete="email"
           required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className={inputClass}
           placeholder="your.email@example.com"
         />
@@ -72,6 +88,8 @@ export function BftLearnConsentForm() {
             name="consent"
             type="checkbox"
             required
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
             className="h-5 w-5 rounded border-slate-300 text-primary-600 shadow-sm focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           />
         </div>
@@ -103,11 +121,16 @@ export function BftLearnConsentForm() {
       <div className="pt-2">
         <button
           type="submit"
-          disabled={status === "loading"}
+          disabled={status === "loading" || !isFormValid}
           className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary-900/15 transition hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
         >
           {status === "loading" ? "Submitting…" : "Submit consent"}
         </button>
+        {!isFormValid && status !== "loading" && status !== "success" && (
+          <p className="mt-2 text-xs text-slate-500">
+            Please provide your email and agree to the terms to submit.
+          </p>
+        )}
       </div>
     </form>
   );
