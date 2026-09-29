@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
+import { getArticles } from "@/lib/articles";
 import { isSubjectsFeatureEnabled } from "@/lib/feature-flags";
 import { getSiteUrl } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
 
   const subjectRoutes: MetadataRoute.Sitemap = isSubjectsFeatureEnabled()
@@ -78,7 +79,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     ...subjectRoutes,
+    {
+      url: `${base}/resources`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
   ];
 
-  return routes;
+  const articles = await getArticles();
+  const articleRoutes: MetadataRoute.Sitemap = articles
+    .filter((article) => !article.noIndex)
+    .map((article) => ({
+      url: `${base}/resources/${article.slug}`,
+      lastModified: new Date(article.updatedDate ?? article.publishedDate),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    }));
+
+  return [...routes, ...articleRoutes];
 }

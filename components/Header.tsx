@@ -199,6 +199,9 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
           <Link href="/faq" className={headerLinkClass(scrolled)}>
             FAQs
           </Link>
+          <Link href="/resources" className={headerLinkClass(scrolled)}>
+            Resources
+          </Link>
           <Link
             href="/contact"
             className={[
@@ -359,6 +362,14 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
                   onClick={closeMobileMenu}
                 >
                   FAQs
+                </Link>
+
+                <Link
+                  href="/resources"
+                  className="block rounded-xl px-4 py-4 text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                  onClick={closeMobileMenu}
+                >
+                  Resources
                 </Link>
 
                 <div className="mt-6 flex-1" />

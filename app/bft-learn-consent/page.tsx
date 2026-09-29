@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "BFT Learn Test - Participation Consent",
   description:
     "Review the terms and conditions for participating in the BFT Learn test program.",
+  robots: { index: false, follow: false },
 };
 
 export default function BftLearnConsentPage() {

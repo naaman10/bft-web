@@ -217,6 +217,47 @@ export function serviceJsonLd(siteUrl: string, service: ServiceForJsonLd) {
  * Homepage testimonial reviews as schema.org Review nodes.
  * Rich-text review bodies are flattened to plain text for JSON-LD compliance.
  */
+export type ArticleForJsonLd = {
+  path: string;
+  headline: string;
+  description: string;
+  datePublished: string;
+  dateModified?: string;
+  authorName: string;
+  image?: string;
+};
+
+/** Article JSON-LD. Publisher references the site-wide organisation. */
+export function articleJsonLd(siteUrl: string, article: ArticleForJsonLd) {
+  const base = siteUrl.replace(/\/$/, "");
+  const path = article.path.startsWith("/") ? article.path : `/${article.path}`;
+  const pageUrl = `${base}${path}`;
+
+  const node: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.headline,
+    description: article.description,
+    datePublished: article.datePublished,
+    dateModified: article.dateModified ?? article.datePublished,
+    author: {
+      "@type": "Person",
+      name: article.authorName,
+    },
+    publisher: { "@id": organizationId(base) },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": pageUrl,
+    },
+  };
+
+  if (article.image) {
+    node.image = [article.image];
+  }
+
+  return node;
+}
+
 export function testimonialReviewsJsonLd(siteUrl: string, reviews: ReviewEntry[]) {
   if (!reviews.length) return null;
 

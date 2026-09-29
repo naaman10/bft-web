@@ -15,6 +15,12 @@ export function Footer({ siteName = "Brighter Futures Tutoring" }: FooterProps) 
         </p>
         <p className="mb-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           <Link
+            href="/resources"
+            className="font-medium text-slate-600 underline underline-offset-2 transition hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400"
+          >
+            Resources
+          </Link>
+          <Link
             href="/privacy"
             className="font-medium text-slate-600 underline underline-offset-2 transition hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400"
           >
