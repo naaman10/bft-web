@@ -10,16 +10,11 @@ export const LOCAL_AREA_PHRASE = "in and around Hull, East Yorkshire and Greater
 export const LOCAL_AREA_META =
   "Tutoring for families in and around Hull, East Yorkshire and Greater Manchester";
 
-/** Region names for Schema.org `areaServed` (keep in sync with copy above). */
-export const LOCAL_AREA_SCHEMA_REGIONS = [
-  "Greater Manchester",
-  "Hull",
-  "East Yorkshire",
-] as const;
-
+/** Places named in on-page copy. Hull is a city; the others are administrative areas. */
 export function localAreaServedJsonLd(): { "@type": string; name: string }[] {
-  return LOCAL_AREA_SCHEMA_REGIONS.map((name) => ({
-    "@type": "AdministrativeArea",
-    name,
-  }));
+  return [
+    { "@type": "City", name: "Hull" },
+    { "@type": "AdministrativeArea", name: "East Yorkshire" },
+    { "@type": "AdministrativeArea", name: "Greater Manchester" },
+  ];
 }

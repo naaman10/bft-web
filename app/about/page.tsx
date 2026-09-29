@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import { aboutPageJsonLd, breadcrumbListJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA, LOCAL_AREA_META, LOCAL_AREA_PHRASE } from "@/lib/site-location";
 
@@ -29,6 +29,12 @@ export default function AboutPage() {
           { name: "Home", path: "/" },
           { name: "About us", path: "/about" },
         ])}
+      />
+      <JsonLd
+        data={aboutPageJsonLd(siteUrl, {
+          description: `Learn about Brighter Futures Tutoring and Ellie Langford, lead tutor and owner. ${LOCAL_AREA_META}`,
+          founderImage: ELLIE_PORTRAIT_URL,
+        })}
       />
       <main>
         {/* Hero — organisation */}

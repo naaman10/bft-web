@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
-import { isSubjectsFeatureEnabled } from "@/lib/feature-flags";
-import { subjectNavLinks } from "@/lib/subjects";
+import { locationNavLinks } from "@/lib/locations";
+import { tutoringNavLinks } from "@/lib/tutoring";
 
 interface HeaderProps {
   siteName?: string;
@@ -17,22 +17,25 @@ const serviceLinks = [
 ] as const;
 
 export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) {
-  const subjectsEnabled = isSubjectsFeatureEnabled();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
-  const [mobileSubjectsOpen, setMobileSubjectsOpen] = useState(false);
+  const [mobileTutoringOpen, setMobileTutoringOpen] = useState(false);
+  const [mobileLocationsOpen, setMobileLocationsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const mobileNavId = useId();
   const mobileServicesPanelId = useId();
   const mobileServicesLabelId = useId();
-  const mobileSubjectsPanelId = useId();
-  const mobileSubjectsLabelId = useId();
+  const mobileTutoringPanelId = useId();
+  const mobileTutoringLabelId = useId();
+  const mobileLocationsPanelId = useId();
+  const mobileLocationsLabelId = useId();
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
     setMobileServicesOpen(false);
-    setMobileSubjectsOpen(false);
+    setMobileTutoringOpen(false);
+    setMobileLocationsOpen(false);
   };
 
   useEffect(() => {
@@ -163,41 +166,70 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
               </div>
             </div>
           </div>
-          {subjectsEnabled ? (
-            <div className="relative group">
-              <button
-                type="button"
-                className={[
-                  "flex items-center gap-1 py-1 text-sm font-medium transition-colors duration-300",
-                  scrolled
-                    ? "text-slate-600 hover:text-primary-600"
-                    : "text-white/90 hover:text-white",
-                ].join(" ")}
-              >
-                Subjects
-                <span className="text-xs">▾</span>
-              </button>
-              <div className="absolute left-0 top-full w-56 pt-2" aria-hidden />
-              <div className="pointer-events-none absolute left-0 top-full w-56 pt-2 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
-                <div className="rounded-xl border border-slate-200 bg-white/95 py-2 shadow-lg">
-                  {subjectNavLinks.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block px-4 py-2.5 text-sm text-slate-700 first:rounded-t-lg last:rounded-b-lg hover:bg-slate-50"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
+          <div className="relative group">
+            <button
+              type="button"
+              className={[
+                "flex items-center gap-1 py-1 text-sm font-medium transition-colors duration-300",
+                scrolled
+                  ? "text-slate-600 hover:text-primary-600"
+                  : "text-white/90 hover:text-white",
+              ].join(" ")}
+            >
+              Tutoring
+              <span className="text-xs">▾</span>
+            </button>
+            <div className="absolute left-0 top-full w-56 pt-2" aria-hidden />
+            <div className="pointer-events-none absolute left-0 top-full w-56 pt-2 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+              <div className="rounded-xl border border-slate-200 bg-white/95 py-2 shadow-lg">
+                {tutoringNavLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block px-4 py-2.5 text-sm text-slate-700 first:rounded-t-lg last:rounded-b-lg hover:bg-slate-50"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
             </div>
-          ) : null}
+          </div>
+          <div className="relative group">
+            <button
+              type="button"
+              className={[
+                "flex items-center gap-1 py-1 text-sm font-medium transition-colors duration-300",
+                scrolled
+                  ? "text-slate-600 hover:text-primary-600"
+                  : "text-white/90 hover:text-white",
+              ].join(" ")}
+            >
+              Locations
+              <span className="text-xs">▾</span>
+            </button>
+            <div className="absolute left-0 top-full w-56 pt-2" aria-hidden />
+            <div className="pointer-events-none absolute left-0 top-full w-56 pt-2 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+              <div className="max-h-[70vh] overflow-y-auto rounded-xl border border-slate-200 bg-white/95 py-2 shadow-lg">
+                {locationNavLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
           <Link href="/about" className={headerLinkClass(scrolled)}>
             About
           </Link>
           <Link href="/faq" className={headerLinkClass(scrolled)}>
             FAQs
+          </Link>
+          <Link href="/resources" className={headerLinkClass(scrolled)}>
+            Resources
           </Link>
           <Link
             href="/contact"
@@ -296,54 +328,99 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
                   </div>
                 </div>
 
-                {subjectsEnabled ? (
-                  <div className="pb-2">
-                    <button
-                      type="button"
-                      id={mobileSubjectsLabelId}
-                      className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
-                      aria-expanded={mobileSubjectsOpen}
-                      aria-controls={mobileSubjectsPanelId}
-                      onClick={() => setMobileSubjectsOpen((o) => !o)}
+                <div className="pb-2">
+                  <button
+                    type="button"
+                    id={mobileTutoringLabelId}
+                    className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                    aria-expanded={mobileTutoringOpen}
+                    aria-controls={mobileTutoringPanelId}
+                    onClick={() => setMobileTutoringOpen((open) => !open)}
+                  >
+                    <span>Tutoring</span>
+                    <svg
+                      className={[
+                        "h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200",
+                        mobileTutoringOpen ? "rotate-180" : "",
+                      ].join(" ")}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden
                     >
-                      <span>Subjects</span>
-                      <svg
-                        className={[
-                          "h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200",
-                          mobileSubjectsOpen ? "rotate-180" : "",
-                        ].join(" ")}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        aria-hidden
-                      >
-                        <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </button>
-                    <div
-                      id={mobileSubjectsPanelId}
-                      role="region"
-                      aria-labelledby={mobileSubjectsLabelId}
-                      hidden={!mobileSubjectsOpen}
-                      className="mt-2 pl-1"
-                    >
-                      <ul className="flex flex-col gap-1">
-                        {subjectNavLinks.map((item) => (
-                          <li key={item.href}>
-                            <Link
-                              href={item.href}
-                              className="block rounded-xl py-3 pl-4 pr-4 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 active:bg-slate-100"
-                              onClick={closeMobileMenu}
-                            >
-                              {item.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                  <div
+                    id={mobileTutoringPanelId}
+                    role="region"
+                    aria-labelledby={mobileTutoringLabelId}
+                    hidden={!mobileTutoringOpen}
+                    className="mt-2 pl-1"
+                  >
+                    <ul className="flex flex-col gap-1">
+                      {tutoringNavLinks.map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            className="block rounded-xl py-3 pl-4 pr-4 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                            onClick={closeMobileMenu}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                ) : null}
+                </div>
+
+                <div className="pb-2">
+                  <button
+                    type="button"
+                    id={mobileLocationsLabelId}
+                    className="flex w-full items-center justify-between gap-3 rounded-xl px-4 py-4 text-left text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                    aria-expanded={mobileLocationsOpen}
+                    aria-controls={mobileLocationsPanelId}
+                    onClick={() => setMobileLocationsOpen((open) => !open)}
+                  >
+                    <span>Locations</span>
+                    <svg
+                      className={[
+                        "h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200",
+                        mobileLocationsOpen ? "rotate-180" : "",
+                      ].join(" ")}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden
+                    >
+                      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                  <div
+                    id={mobileLocationsPanelId}
+                    role="region"
+                    aria-labelledby={mobileLocationsLabelId}
+                    hidden={!mobileLocationsOpen}
+                    className="mt-2 pl-1"
+                  >
+                    <ul className="flex flex-col gap-1">
+                      {locationNavLinks.map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            className="block rounded-xl py-3 pl-4 pr-4 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                            onClick={closeMobileMenu}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
 
                 <Link
                   href="/about"
@@ -359,6 +436,14 @@ export function Header({ siteName = "Brighter Futures Tutoring" }: HeaderProps) 
                   onClick={closeMobileMenu}
                 >
                   FAQs
+                </Link>
+
+                <Link
+                  href="/resources"
+                  className="block rounded-xl px-4 py-4 text-lg font-medium text-slate-800 transition-colors hover:bg-slate-50 active:bg-slate-100"
+                  onClick={closeMobileMenu}
+                >
+                  Resources
                 </Link>
 
                 <div className="mt-6 flex-1" />
