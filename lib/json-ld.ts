@@ -1,6 +1,4 @@
 import { LOCAL_AREA_PHRASE, localAreaServedJsonLd } from "@/lib/site-location";
-import type { ReviewEntry } from "@/lib/contentful";
-import { documentToPlainText } from "@/lib/rich-text-plain";
 
 const ORG_NAME = "Brighter Futures Tutoring";
 
@@ -23,11 +21,42 @@ function organizationEntity(siteUrl: string) {
     name: ORG_NAME,
     url: base,
     description: ORG_DESCRIPTION,
-    logo: {
-      "@type": "ImageObject",
-      url: `${base}/favicons/android-chrome-512x512.png`,
-    },
+    logo: organizationLogo(base),
     areaServed: localAreaServedJsonLd(),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Tutoring",
+      itemListElement: [
+        offer(base, "One-to-one tutoring", "/services/one-to-one"),
+        offer(base, "Group tutoring", "/services/group"),
+        offer(base, "Home education support", "/services/home-ed"),
+        offer(base, "Maths tutoring", "/tutoring/maths"),
+        offer(base, "English tutoring", "/tutoring/english"),
+        offer(base, "Reading tutoring", "/tutoring/reading"),
+        offer(base, "SPaG tutoring", "/tutoring/spag"),
+        offer(base, "11+ tutoring", "/tutoring/11-plus"),
+      ],
+    },
+  };
+}
+
+function organizationLogo(base: string) {
+  return {
+    "@type": "ImageObject",
+    url: `${base}/favicons/android-chrome-512x512.png`,
+    width: 512,
+    height: 512,
+  };
+}
+
+function offer(base: string, name: string, path: string) {
+  return {
+    "@type": "Offer",
+    itemOffered: {
+      "@type": "Service",
+      name,
+      url: `${base}${path}`,
+    },
   };
 }
 
@@ -41,33 +70,13 @@ function webSiteEntity(siteUrl: string) {
     url: base,
     name: ORG_NAME,
     description: WEBSITE_DESCRIPTION,
+    inLanguage: "en-GB",
     publisher: { "@id": orgId },
   };
 }
 
-/**
- * EducationalOrganization + LocalBusiness — use site-wide (e.g. root layout) so every
- * page exposes the same organisation entity.
- */
-export function organizationJsonLd(siteUrl: string) {
-  const base = siteUrl.replace(/\/$/, "");
-  return {
-    "@context": "https://schema.org",
-    ...organizationEntity(base),
-  };
-}
-
-/** WebSite linked to `#organization` — home page only, alongside layout `organizationJsonLd`. */
-export function webSiteJsonLd(siteUrl: string) {
-  const base = siteUrl.replace(/\/$/, "");
-  return {
-    "@context": "https://schema.org",
-    ...webSiteEntity(base),
-  };
-}
-
-/** Combined @graph — same as layout org + home WebSite in one script (legacy). */
-export function homeOrganizationWebSiteJsonLd(siteUrl: string) {
+/** Organisation and website, once per page, so other markup can reference their @id. */
+export function siteGraphJsonLd(siteUrl: string) {
   const base = siteUrl.replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
@@ -136,6 +145,7 @@ export function contactPageLocalBusinessJsonLd(siteUrl: string) {
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "EducationalOrganization",
         "@id": orgId,
         address: {
           "@type": "PostalAddress",
@@ -160,12 +170,13 @@ export function contactPageLocalBusinessJsonLd(siteUrl: string) {
 
 /** Inner pages: BreadcrumbList — paths must start with `/`. */
 export function breadcrumbListJsonLd(siteUrl: string, items: BreadcrumbItem[]) {
+  const base = siteUrl.replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => {
       const path = item.path.startsWith("/") ? item.path : `/${item.path}`;
-      const itemUrl = path === "/" ? `${siteUrl}/` : `${siteUrl}${path}`;
+      const itemUrl = path === "/" ? `${base}/` : `${base}${path}`;
       return {
         "@type": "ListItem",
         position: index + 1,
@@ -185,9 +196,17 @@ export type ServiceForJsonLd = {
   serviceType: string;
   /** Hero or listing image URL */
   image?: string;
+  /** When set, schema areaServed is this place instead of the whole service area. */
+  areaName?: string;
+  /** Schema.org type for areaName. Defaults to Place. */
+  areaType?: "City" | "AdministrativeArea" | "Place";
+  /** Administrative area that contains areaName, when the page says so. */
+  containedIn?: string;
+  /** Only when the page states an age range. */
+  audience?: { minAge: number; maxAge: number };
 };
 
-/** Service JSON-LD — `provider` references layout `organizationJsonLd` (`#organization`). */
+/** Service JSON-LD — `provider` references the site-wide organisation (`#organization`). */
 export function serviceJsonLd(siteUrl: string, service: ServiceForJsonLd) {
   const base = siteUrl.replace(/\/$/, "");
   const orgId = organizationId(base);
@@ -203,8 +222,18 @@ export function serviceJsonLd(siteUrl: string, service: ServiceForJsonLd) {
     url: pageUrl,
     serviceType: service.serviceType,
     provider: { "@id": orgId },
-    areaServed: localAreaServedJsonLd(),
+    areaServed: service.areaName
+      ? placeServed(service.areaName, service.areaType, service.containedIn)
+      : localAreaServedJsonLd(),
   };
+
+  if (service.audience) {
+    node.audience = {
+      "@type": "PeopleAudience",
+      suggestedMinAge: service.audience.minAge,
+      suggestedMaxAge: service.audience.maxAge,
+    };
+  }
 
   if (service.image) {
     node.image = service.image;
@@ -213,10 +242,17 @@ export function serviceJsonLd(siteUrl: string, service: ServiceForJsonLd) {
   return node;
 }
 
-/**
- * Homepage testimonial reviews as schema.org Review nodes.
- * Rich-text review bodies are flattened to plain text for JSON-LD compliance.
- */
+function placeServed(name: string, areaType: ServiceForJsonLd["areaType"], containedIn?: string) {
+  const place: Record<string, unknown> = {
+    "@type": areaType ?? "Place",
+    name,
+  };
+  if (containedIn) {
+    place.containedInPlace = { "@type": "AdministrativeArea", name: containedIn };
+  }
+  return place;
+}
+
 export type ArticleForJsonLd = {
   path: string;
   headline: string;
@@ -224,6 +260,8 @@ export type ArticleForJsonLd = {
   datePublished: string;
   dateModified?: string;
   authorName: string;
+  /** Visible category, e.g. Maths or 11 Plus. */
+  articleSection?: string;
   image?: string;
 };
 
@@ -233,72 +271,115 @@ export function articleJsonLd(siteUrl: string, article: ArticleForJsonLd) {
   const path = article.path.startsWith("/") ? article.path : `/${article.path}`;
   const pageUrl = `${base}${path}`;
 
+  const authorName = article.authorName.trim();
+  const author =
+    authorName === ORG_NAME
+      ? { "@id": organizationId(base) }
+      : { "@type": "Person", name: authorName };
+
   const node: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${pageUrl}#article`,
     headline: article.headline,
     description: article.description,
+    inLanguage: "en-GB",
     datePublished: article.datePublished,
     dateModified: article.dateModified ?? article.datePublished,
-    author: {
-      "@type": "Person",
-      name: article.authorName,
+    author,
+    publisher: {
+      "@id": organizationId(base),
+      "@type": "Organization",
+      name: ORG_NAME,
+      logo: organizationLogo(base),
     },
-    publisher: { "@id": organizationId(base) },
+    isPartOf: { "@id": `${base}/#website` },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": pageUrl,
     },
   };
 
-  if (article.image) {
-    node.image = [article.image];
-  }
+  if (article.articleSection) node.articleSection = article.articleSection;
+  if (article.image) node.image = [article.image];
 
   return node;
 }
 
-export function testimonialReviewsJsonLd(siteUrl: string, reviews: ReviewEntry[]) {
-  if (!reviews.length) return null;
+export type ResourceListItem = {
+  slug: string;
+  title: string;
+};
 
+/** Resources index. The list must match the articles actually shown. */
+export function resourceListJsonLd(
+  siteUrl: string,
+  articles: readonly ResourceListItem[],
+  options?: { category?: string }
+) {
+  if (articles.length === 0) return null;
   const base = siteUrl.replace(/\/$/, "");
-  const orgId = organizationId(base);
-
-  const reviewNodes = reviews
-    .map((review) => {
-      const reviewBody = documentToPlainText(review.reviewText).trim();
-      if (!reviewBody || !review.parentName.trim()) return null;
-
-      const node: Record<string, unknown> = {
-        "@type": "Review",
-        "@id": `${base}/#review-${review.id}`,
-        itemReviewed: { "@id": orgId },
-        author: {
-          "@type": "Person",
-          name: review.parentName.trim(),
-        },
-        reviewBody,
-      };
-
-      if (review.location?.trim()) {
-        node.author = {
-          "@type": "Person",
-          name: review.parentName.trim(),
-          homeLocation: {
-            "@type": "Place",
-            name: review.location.trim(),
-          },
-        };
-      }
-
-      return node;
-    })
-    .filter((node): node is Record<string, unknown> => node !== null);
-
-  if (!reviewNodes.length) return null;
+  const category = options?.category?.trim();
+  const pageUrl = category
+    ? `${base}/resources?category=${encodeURIComponent(category)}`
+    : `${base}/resources`;
 
   return {
     "@context": "https://schema.org",
-    "@graph": reviewNodes,
+    "@type": "CollectionPage",
+    "@id": `${pageUrl}#collection`,
+    url: pageUrl,
+    name: category ? `${category} resources` : "Resources",
+    inLanguage: "en-GB",
+    isPartOf: { "@id": `${base}/#website` },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: articles.map((article, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: article.title,
+        url: `${pageUrl}/${article.slug}`,
+      })),
+    },
+  };
+}
+
+export function aboutPageJsonLd(
+  siteUrl: string,
+  options: { description: string; founderImage: string }
+) {
+  const base = siteUrl.replace(/\/$/, "");
+  const pageUrl = `${base}/about`;
+  const orgId = organizationId(base);
+  const founderId = `${pageUrl}#ellie-langford`;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        "@id": `${pageUrl}#about`,
+        url: pageUrl,
+        name: "About Brighter Futures Tutoring",
+        description: options.description,
+        inLanguage: "en-GB",
+        isPartOf: { "@id": `${base}/#website` },
+        about: { "@id": orgId },
+        mainEntity: { "@id": orgId },
+      },
+      {
+        "@type": "Person",
+        "@id": founderId,
+        name: "Ellie Langford",
+        jobTitle: "Lead tutor and owner",
+        image: options.founderImage,
+        worksFor: { "@id": orgId },
+      },
+      {
+        "@type": "EducationalOrganization",
+        "@id": orgId,
+        founder: { "@id": founderId },
+      },
+    ],
   };
 }

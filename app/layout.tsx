@@ -7,7 +7,7 @@ import { HomeElevenPlusBanner } from "@/components/HomeElevenPlusBanner";
 import { JsonLd } from "@/components/JsonLd";
 import { LayoutRootFix } from "@/components/LayoutRootFix";
 import { TermlyCMP } from "@/components/TermlyCMP";
-import { organizationJsonLd } from "@/lib/json-ld";
+import { siteGraphJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
 import { LOCAL_AREA_META } from "@/lib/site-location";
 
@@ -109,7 +109,7 @@ export default function RootLayout({
           strategy="beforeInteractive"
           src={TERMLY_RESOURCE_BLOCKER_SRC}
         />
-        <JsonLd data={organizationJsonLd(siteUrl)} />
+        <JsonLd data={siteGraphJsonLd(siteUrl)} />
         <div
           id="site-shell"
           className="relative flex min-h-dvh flex-col overflow-x-clip"

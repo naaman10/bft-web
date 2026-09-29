@@ -1,33 +1,25 @@
 import type { MetadataRoute } from "next";
 import { getArticles } from "@/lib/articles";
-import { isSubjectsFeatureEnabled } from "@/lib/feature-flags";
+import { LOCATION_SLUGS } from "@/lib/locations";
 import { getSiteUrl } from "@/lib/site";
+import { TUTORING_SLUGS } from "@/lib/tutoring";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
 
-  const subjectRoutes: MetadataRoute.Sitemap = isSubjectsFeatureEnabled()
-    ? [
-        {
-          url: `${base}/subjects/english`,
-          lastModified: new Date(),
-          changeFrequency: "monthly",
-          priority: 0.85,
-        },
-        {
-          url: `${base}/subjects/maths`,
-          lastModified: new Date(),
-          changeFrequency: "monthly",
-          priority: 0.85,
-        },
-        {
-          url: `${base}/subjects/11-plus-preparation`,
-          lastModified: new Date(),
-          changeFrequency: "monthly",
-          priority: 0.85,
-        },
-      ]
-    : [];
+  const tutoringRoutes: MetadataRoute.Sitemap = TUTORING_SLUGS.map((slug) => ({
+    url: `${base}/tutoring/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.85,
+  }));
+
+  const locationRoutes: MetadataRoute.Sitemap = LOCATION_SLUGS.map((slug) => ({
+    url: `${base}/location/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
 
   const routes: MetadataRoute.Sitemap = [
     {
@@ -78,7 +70,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.85,
     },
-    ...subjectRoutes,
+    ...tutoringRoutes,
+    ...locationRoutes,
     {
       url: `${base}/resources`,
       lastModified: new Date(),

@@ -139,17 +139,20 @@ export default async function ArticlePage({ params }: Props) {
           { name: article.title, path },
         ])}
       />
-      <JsonLd
-        data={articleJsonLd(siteUrl, {
-          path,
-          headline: article.title,
-          description: article.seoDescription ?? article.excerpt,
-          datePublished: article.publishedDate,
-          dateModified: article.updatedDate,
-          authorName: article.authorName,
-          image: image?.url,
-        })}
-      />
+      {article.noIndex ? null : (
+        <JsonLd
+          data={articleJsonLd(siteUrl, {
+            path,
+            headline: article.title,
+            description: article.seoDescription ?? article.excerpt,
+            datePublished: article.publishedDate,
+            dateModified: article.updatedDate,
+            authorName: article.authorName,
+            articleSection: article.category,
+            image: image?.url,
+          })}
+        />
+      )}
       <main>
         <section
           className="relative -mt-[var(--site-header-height)] overflow-hidden pt-28 md:pt-32"

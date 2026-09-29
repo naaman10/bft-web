@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
 import { ARTICLE_CATEGORIES } from "@/lib/article-model";
 import { formatArticleDate, getArticles } from "@/lib/articles";
-import { breadcrumbListJsonLd } from "@/lib/json-ld";
+import { breadcrumbListJsonLd, resourceListJsonLd } from "@/lib/json-ld";
 import { getSiteUrl } from "@/lib/site";
 
 export const revalidate = 60;
@@ -35,6 +35,11 @@ export default async function ResourcesPage({ searchParams }: ResourcesPageProps
   const categoriesInUse = ARTICLE_CATEGORIES.filter((category) =>
     articles.some((article) => article.category === category)
   );
+  const listJsonLd = resourceListJsonLd(
+    siteUrl,
+    visible.map((article) => ({ slug: article.slug, title: article.title })),
+    { category: activeCategory }
+  );
 
   return (
     <div className="min-h-screen bg-[#f4f6f8] text-slate-800">
@@ -44,6 +49,7 @@ export default async function ResourcesPage({ searchParams }: ResourcesPageProps
           { name: "Resources", path: "/resources" },
         ])}
       />
+      {listJsonLd ? <JsonLd data={listJsonLd} /> : null}
       <main>
         <section
           className="relative -mt-[var(--site-header-height)] overflow-hidden pt-28 md:pt-32"

@@ -229,6 +229,6 @@ export function isSubjectSlug(value: string): value is SubjectSlug {
 /** Header / mobile nav links */
 export const subjectNavLinks: { href: string; label: string }[] =
   SUBJECT_SLUGS.map((slug) => ({
-    href: `/subjects/${slug}`,
+    href: slug === "11-plus-preparation" ? "/tutoring/11-plus" : `/tutoring/${slug}`,
     label: SUBJECTS[slug].label,
   }));

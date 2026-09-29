@@ -36,12 +36,11 @@
  * - socialImage: Media, optional
  *
  * Relationships
- * Subject, location and service landing pages are not Contentful models yet,
+ * Subject, location and service pages are site routes, not Contentful models,
  * so those relationships are short-text slug lists (not entry references).
  * - relatedArticles: References, many, Article, optional
  * - relatedSubjectSlugs: Short text, list, optional. See SUBJECT_LINKS.
  * - relatedLocationSlugs: Short text, list, optional. See LOCATION_LINKS.
- *   Stored for later location pages. Rendered as text until that page exists.
  * - relatedServiceSlugs: Short text, list, optional. See SERVICE_LINKS.
  *
  * The site also accepts the same slug lists on relatedSubjects,
@@ -83,12 +82,14 @@ export type SiteLink = {
 };
 
 export const SUBJECT_LINKS: readonly SiteLink[] = [
-  { slug: "maths", label: "Maths tutoring", href: "/subjects/maths" },
-  { slug: "english", label: "English tutoring", href: "/subjects/english" },
+  { slug: "maths", label: "Maths tutoring", href: "/tutoring/maths" },
+  { slug: "english", label: "English tutoring", href: "/tutoring/english" },
+  { slug: "reading", label: "Reading tutoring", href: "/tutoring/reading" },
+  { slug: "spag", label: "SPaG tutoring", href: "/tutoring/spag" },
   {
     slug: "11-plus-preparation",
     label: "11+ preparation",
-    href: "/subjects/11-plus-preparation",
+    href: "/tutoring/11-plus",
   },
 ];
 
@@ -106,16 +107,17 @@ export const SERVICE_LINKS: readonly SiteLink[] = [
   },
 ];
 
-/** Confirmed service areas. href is added when the location page is published. */
+/** Service areas. Slugs are stored on articles and resolved to these pages. */
 export const LOCATION_LINKS: readonly SiteLink[] = [
-  { slug: "hessle", label: "Hessle" },
-  { slug: "hull", label: "Hull" },
-  { slug: "brough", label: "Brough" },
-  { slug: "market-weighton", label: "Market Weighton" },
-  { slug: "howden", label: "Howden" },
-  { slug: "sale", label: "Sale" },
-  { slug: "trafford", label: "Trafford" },
-  { slug: "altrincham", label: "Altrincham" },
+  { slug: "hessle", label: "Hessle", href: "/location/hessle" },
+  { slug: "hull", label: "Hull", href: "/location/hull" },
+  { slug: "brough", label: "Brough", href: "/location/brough" },
+  { slug: "market-weighton", label: "Market Weighton", href: "/location/market-weighton" },
+  { slug: "howden", label: "Howden", href: "/location/howden" },
+  { slug: "greater-manchester", label: "Greater Manchester", href: "/location/greater-manchester" },
+  { slug: "sale", label: "Sale", href: "/location/sale" },
+  { slug: "trafford", label: "Trafford", href: "/location/trafford" },
+  { slug: "altrincham", label: "Altrincham", href: "/location/altrincham" },
 ];
 
 const LINK_MAPS = {
